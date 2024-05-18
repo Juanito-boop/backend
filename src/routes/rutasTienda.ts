@@ -1,10 +1,6 @@
 import { Router } from "express";
-import ControladorTiendaCrear from "../controllers/tiendas/crearTiendaControlador";
-import ControladorTiendaEditar from "../controllers/tiendas/editarTiendaControlador";
-import ControladorTiendaEliminar from "../controllers/tiendas/eliminarTiendaControlador";
-import ControladorTiendaListar from "../controllers/tiendas/listarTiendaControlador";
-import ControladorListarEmp from "../controllers/tiendas/listarEmpleadosControler";
-import ListarId from "../controllers/tiendas/listarTiendaIDController";
+
+import tiendaController from "../controllers/tiendaController";
 
 class Rutas {
     public rutasApi: Router;
@@ -20,26 +16,13 @@ class Rutas {
     }
 
     public rutas() {
-        //cargar los controladorespara el manejo de la info
-        // no pasa nada si la ruta es diferente y lo unico igual debe ser el idecita
-        this.rutasApi.get(
-            "/listarTiendas",
-            ControladorTiendaListar.listarTodosTienda
-        );
-        this.rutasApi.post("/crearTienda", ControladorTiendaCrear.postTienda);
-        this.rutasApi.put(
-            "/editarTienda",
-            ControladorTiendaEditar.editarTienda
-        );
-        this.rutasApi.delete(
-            "/eliminar/:idecita",
-            ControladorTiendaEliminar.borrarTienda
-        );
-        this.rutasApi.get(
-            "/listarEmpleados",
-            ControladorListarEmp.listarEmpTienda
-        );
-        this.rutasApi.get("/listarPorId/:idecita", ListarId.listarID);
+        // /api/public/tiendas
+        this.rutasApi.get("/", tiendaController.getStores);
+        this.rutasApi.get("/:idTienda", tiendaController.getFilteredStoreById);
+        this.rutasApi.get("/empleados", tiendaController.getEmployeeCounterStores);
+        this.rutasApi.post("/", tiendaController.insertStore);
+        this.rutasApi.patch("/:idTienda", tiendaController.patchStore);
+        this.rutasApi.delete("/:idTienda", tiendaController.deleteStore);
     }
 }
 

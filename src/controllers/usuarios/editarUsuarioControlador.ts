@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import editarUsuarioDAO from "../../dao/usuarios/ActualizarDao/editarUsuarioDAO";
-import { SQL_USUARIO } from "../../respository/usuarios/usuarioRepoCRUD";
+import { SQL_USUARIO } from "../../repository/usuarios/usuarioRepoCRUD";
 
 class editarUsuarioControlador extends editarUsuarioDAO {
     public editarUsuario(req: Request, res: Response): void {

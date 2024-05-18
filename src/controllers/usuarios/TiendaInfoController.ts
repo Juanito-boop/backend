@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import comprobarDAO from "../../dao/usuarios/ListarDao/ListarTiendaInfoDAO";
-import { SQL_USUARIO } from "../../respository/usuarios/usuarioRepoCRUD";
+import { SQL_USUARIO } from "../../repository/usuarios/usuarioRepoCRUD";
 
 class comprobarCtrl extends comprobarDAO {
     public listarInfo(req: Request, res: Response): void {

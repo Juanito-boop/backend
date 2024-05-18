@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import ListarPorIdDAO from "../../dao/usuarios/ListarDao/listarUSIDDAO";
-import { SQL_USUARIO } from "../../respository/usuarios/usuarioRepoCRUD";
+import { SQL_USUARIO } from "../../repository/usuarios/usuarioRepoCRUD";
 
 class listaridCtrl extends ListarPorIdDAO {
     public listarID(req: Request, res: Response): void {

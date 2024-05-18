@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import editar from "../../../dao/productos/ActualizarDao/editarProdDAO";
-import { SQL_PRODUCTOS } from "../../../respository/productos/productosCRUD";
+import { SQL_PRODUCTOS } from "../../../repository/productos/productosCRUD";
 
 class editarProducto extends editar {
     public editar(req: Request, res: Response): void {

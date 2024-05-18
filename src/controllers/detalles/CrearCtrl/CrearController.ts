@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import CrearProductosDAO from "../../../dao/detalles/CrearDao/CrearDAO";
-import { SQL_DETALLES } from "../../../respository/detalles/detallesCRUD";
+import { SQL_DETALLES } from "../../../repository/detalles/detallesCRUD";
 
 class CrearProductosFacturasDetalles extends CrearProductosDAO {
   public crear(req: Request, res: Response) {

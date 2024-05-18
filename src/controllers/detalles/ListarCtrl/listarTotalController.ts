@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import listarTotal from "../../../dao/detalles/ListarDao/listarTotalDAO";
-import { SQL_DETALLES } from "../../../respository/detalles/detallesCRUD";
+import { SQL_DETALLES } from "../../../repository/detalles/detallesCRUD";
 
 class listarTotalF extends listarTotal {
   public listarT(req: Request, res: Response) {

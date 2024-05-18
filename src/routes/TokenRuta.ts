@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import tokenControlador2 from "../controllers/token/TokenControlador";
+import TokenController from "../controllers/tokenController";
+
 class TokenRuta {
   public tokenRutaApi: Router;
 
@@ -10,7 +11,8 @@ class TokenRuta {
   }
 
   public lasRutas(): void {
-    this.tokenRutaApi.post("/tokencreado", tokenControlador2.crearToken);
+    // /api/public/token
+    this.tokenRutaApi.post("/tokencreado", TokenController.createToken);
   }
 }
 const tokenRuta = new TokenRuta();

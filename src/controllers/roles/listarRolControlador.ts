@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import ListarRolDAO from "../../dao/roles/ListarDao/ListarRolDAO";
-import { SQL_ROL } from "../../respository/roles/rolRepoCRUD";
+import { SQL_ROL } from "../../repository/roles/rolRepoCRUD";
 
 class listarRolControlador extends ListarRolDAO {
     public listarTodosRol(req: Request, res: Response): void {

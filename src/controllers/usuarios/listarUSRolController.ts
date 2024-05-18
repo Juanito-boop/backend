@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import ListarUSRol from "../../dao/usuarios/ListarDao/ListarUSRolDAO";
-import { SQL_USUARIO } from "../../respository/usuarios/usuarioRepoCRUD";
+import { SQL_USUARIO } from "../../repository/usuarios/usuarioRepoCRUD";
 
 class listarUSRolControlador extends ListarUSRol {
     public listarUSRol(req: Request, res: Response): void {

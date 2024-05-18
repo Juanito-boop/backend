@@ -16,6 +16,7 @@ import rutasDetalles from "../../routes/rutasDetalles";
 class Servidor {
     public app: express.Application;
     public port: String;
+    api:string = "/api/public/"
 
     constructor() {
         this.app = express();
@@ -32,16 +33,18 @@ class Servidor {
         this.app.use(express.json({ limit: "100mb" }));
         this.app.use(express.urlencoded({ extended: true }));
     }
+
     public activarRutas(): void {
-        this.app.use("/api/public/categorias",seguridad.revisar, rutasCategorias);
-        this.app.use("/api/public/facturas",seguridad.revisar, rutasFacturas);
-        this.app.use("/api/public/productos",seguridad.revisar, rutasProductos);
-        this.app.use("/api/public/rol",seguridad.revisar, rutasRol);
-        this.app.use("/api/public/tienda",seguridad.revisar, rutasTienda);
-        this.app.use("/api/public/usuario",seguridad.revisar, rutasUsuario);
-        this.app.use("/api/public/token", tokenRuta);
-        this.app.use("/api/public/detalles", seguridad.revisar , rutasDetalles);
-    }
+        this.app.use(`${this.api}categorias`, seguridad.revisar, rutasCategorias);// listo
+        this.app.use(`${this.api}detalles`, seguridad.revisar, rutasDetalles);
+        this.app.use(`${this.api}facturas`, seguridad.revisar, rutasFacturas);// listo
+        this.app.use(`${this.api}productos`, seguridad.revisar, rutasProductos);// listo
+        this.app.use(`${this.api}roles`, seguridad.revisar, rutasRol);
+        this.app.use(`${this.api}tiendas`, seguridad.revisar, rutasTienda);// listo
+        this.app.use(`${this.api}token`, tokenRuta);// listo
+        this.app.use(`${this.api}usuarios`, seguridad.revisar, rutasUsuario);
+    }    
+    
     public arrancar(): void {
         const puerto = this.app.get("PORT");
         this.app.listen(puerto, () => {

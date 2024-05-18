@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import listarDate from "../../../dao/productos/ListarDao/listarDateDAO";
-import { SQL_PRODUCTOS } from "../../../respository/productos/productosCRUD";
+import { SQL_PRODUCTOS } from "../../../repository/productos/productosCRUD";
 
 class listarDateCtrl extends listarDate {
     public listarDate(req: Request, res: Response) {

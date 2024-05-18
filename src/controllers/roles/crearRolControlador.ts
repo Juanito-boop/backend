@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import crearRolDAO from "../../dao/roles/CrearDao/crearRolDAO";
-import { SQL_ROL } from "../../respository/roles/rolRepoCRUD";
+import { SQL_ROL } from "../../repository/roles/rolRepoCRUD";
 
 class crearRolControlador extends crearRolDAO {
     public postRol(req: Request, res: Response): void {
