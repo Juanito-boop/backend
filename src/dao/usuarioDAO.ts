@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { Usuario, UsuarioCreationResult } from "../interface/interfaces";
 import pool from "../config/connection/conexion";
+import { Usuario, UsuarioCreationResult } from "../interface/interfaces";
 import { SQL_USUARIO } from "../repository/crudSQL";
 
 export default class UsuarioDAO {
