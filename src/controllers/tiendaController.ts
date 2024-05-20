@@ -10,20 +10,20 @@ class TiendaController {
       direccion,
       telefono
     ];
-    tiendaDAO.insertStore(data, res);
+    tiendaDAO.addNewStore(data, res);
   }
 
   public getStores(_req: Request, res: Response): void {
     tiendaDAO.fetchStores(res);
   }
 
+  public getEmployeeCounterStores(_req: Request, res: Response): void {
+    tiendaDAO.fetchEmployeeCounterStores(res);
+  }
+  
   public getFilteredStoreById(req: Request, res: Response): void {
     const idTienda: number = parseInt(req.params.idTienda);
     tiendaDAO.filterStoreById(idTienda, res);
-  }
-
-  public getEmployeeCounterStores(_req: Request, res: Response): void {
-    tiendaDAO.fetchEmployeeCounterStores(res);
   }
 
   public patchStore(req: Request, res: Response): void {
