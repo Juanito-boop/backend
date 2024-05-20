@@ -17,10 +17,10 @@ class Rutas {
 
     public rutas() {
         // /api/public/tiendas
+        this.rutasApi.post("/", tiendaController.insertStore);
         this.rutasApi.get("/", tiendaController.getStores);
         this.rutasApi.get("/empleados", tiendaController.getEmployeeCounterStores);
         this.rutasApi.get("/:idTienda", tiendaController.getFilteredStoreById);
-        this.rutasApi.post("/", tiendaController.insertStore);
         this.rutasApi.patch("/:idTienda", tiendaController.patchStore);
         this.rutasApi.delete("/:idTienda", tiendaController.deleteStore);
     }
