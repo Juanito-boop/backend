@@ -5,8 +5,8 @@ import { SQL_USUARIO } from "../../repository/usuarios/usuarioRepoCRUD";
 
 class listarUSRolControlador extends ListarUSRol {
     public listarUSRol(req: Request, res: Response): void {
-        const sql_usu_listarUSRol = SQL_USUARIO.CONTAR;
-        listarUSRolControlador.listarUSRol(sql_usu_listarUSRol, [], res);
+        // const sql_usu_listarUSRol = SQL_USUARIO.CONTAR;
+        // listarUSRolControlador.listarUSRol(sql_usu_listarUSRol, [], res);
     }
 }
 

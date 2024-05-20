@@ -54,7 +54,7 @@ export const SQL_TIENDAS = {
     isStoreDuplicate: "SELECT COUNT(*) > 0 AS exists FROM tiendas WHERE lower(nombre_tienda) = lower($1) and lower(direccion_tienda) = lower($2) and lower(telefono_tienda) = lower($3) and lower(propietario_tienda) = lower($4)",
     getStores: "SELECT id_tienda, nombre_tienda, direccion_tienda, telefono_tienda FROM tiendas",
     getStoreById: "SELECT id_tienda, nombre_tienda, direccion_tienda, telefono_tienda FROM tiendas WHERE id_tienda = $1",
-    employeeCounter: 'SELECT t.nombre_tienda as "tienda", COUNT(u.id_usuario) as "# empleados" FROM tiendas t JOIN usuarios u ON t.id_tienda = u.id_tienda GROUP BY t.nombre_tienda',
+    employeeCounter: 'SELECT t.id_tienda as "id", t.nombre_tienda as "tienda", COUNT(u.id_usuario)::integer FROM tiendas t JOIN usuarios u ON t.id_tienda = u.id_tienda GROUP BY t.id_tienda, t.nombre_tienda ORDER BY t.id_tienda ASC',
     deleteStore: "DELETE FROM tiendas WHERE id_tienda = $1",
 }
 

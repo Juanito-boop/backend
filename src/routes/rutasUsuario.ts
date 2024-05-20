@@ -39,7 +39,7 @@ class Rutas {
             "/listarInfo/:idecita",
             ControladorTiendaInfo.listarInfo
         );
-        this.rutasApi.get("/listarPorId/:idecita", listarID.listarID);
+        // this.rutasApi.get("/listarPorId/:idecita", listarID.listarID);
     }
 }
 

@@ -10,7 +10,7 @@ class editarUsuarioControlador extends editarUsuarioDAO {
         req.body =>{ "nombre": "User", "apellido":"Test","edad": "15"} 
         */
         const datos = [username, password, id_tienda, id_rol, id_usuario];
-        editarUsuarioControlador.editarUsuario(SQL_USUARIO.EDITAR, datos, res);
+        // editarUsuarioControlador.editarUsuario(SQL_USUARIO.EDITAR, datos, res);
     }
 }
 

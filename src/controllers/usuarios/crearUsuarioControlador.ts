@@ -12,12 +12,12 @@ class crearUsuarioControlador extends crearUsuarioDAO {
 
         const datos = [username, password, id_tienda, id_rol];
         console.log(">>>" + datos);
-        crearUsuarioControlador.crearUsuario(
-            SQL_USUARIO.VERIFICAR,
-            SQL_USUARIO.CREAR,
-            datos,
-            res
-        );
+        // crearUsuarioControlador.crearUsuario(
+        //     SQL_USUARIO.VERIFICAR,
+        //     SQL_USUARIO.CREAR,
+        //     datos,
+        //     res
+        // );
     }
 }
 const ctrlCrearUsuario = new crearUsuarioControlador();

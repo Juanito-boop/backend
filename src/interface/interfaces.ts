@@ -62,6 +62,7 @@ export interface Token {
 }
 
 export interface Empleados{
+  id: number;
   tienda: string;
   "# empleados": number;
 }
