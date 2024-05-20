@@ -4,7 +4,7 @@ import { Empleados, Exists, Tienda, TiendaCreationResult } from "../interface/in
 import { SQL_TIENDAS } from "../repository/crudSQL";
 
 export default class tiendaDAO{
-  public static async insertStore(data: Tienda[], res: Response) {
+  public static async addNewStore(data: Tienda[], res: Response) {
     const existingStore: Exists | null = await pool.oneOrNone(SQL_TIENDAS.isStoreDuplicate, data);
 
     if (existingStore?.exists) {
