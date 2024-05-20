@@ -4,7 +4,7 @@
   "description": "Proyecto camara de comercio proyecto integrador desarrollo orientado a servicios",
   "main": "index.js",
   "scripts": {
-    "build": "tsc -watch",
+    "build": "tsc",
     "dev": "nodemon build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
