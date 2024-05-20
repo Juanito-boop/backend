@@ -64,7 +64,7 @@ export const SQL_TOKEN ={
 
 export const SQL_USUARIO = {
     fetchUsers: "SELECT * FROM usuarios where id_tienda = $1",
-    insertUser: "INSERT INTO usuarios (username,password,id_tienda,id_rol) VALUES($1,$2,$3,$4) RETURNING id_usuario",
+    insertUser: "INSERT INTO usuarios (username, password, id_tienda, id_rol) VALUES($1,$2,$3,$4) RETURNING id_usuario",
     checkUserExists: "SELECT 1 FROM usuarios WHERE id_usuario = $1",
     isUserDuplicate: "SELECT COUNT(u.id_usuario) AS cantidad FROM usuarios u WHERE lower(u.username) = lower($1) and lower(u.password) = lower($2) and u.id_tienda = $3 and u.id_rol = $4",
     updateUser: "UPDATE usuarios SET username = $1,password= $2,id_tienda= $3,id_rol=$4 WHERE id_usuario = $5",
