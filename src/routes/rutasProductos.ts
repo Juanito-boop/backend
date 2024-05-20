@@ -12,10 +12,10 @@ class RutasProductos {
         this.rutas();
     }
     public rutas() {
+        this.rutasApi.post("/", ProductoController.createProduct)
         this.rutasApi.get("/:tienda", ProductoController.fetchProducts)
         this.rutasApi.get("/:tienda/:idProducto", ProductoController.filterProductById)
-        this.rutasApi.post("/", ProductoController.createProduct)
-        this.rutasApi.put("/:tienda/:idProducto", ProductoController.updateProduct)
+        this.rutasApi.patch("/:tienda/:idProducto", ProductoController.updateProduct)
         this.rutasApi.delete("/:tienda/:idProducto", ProductoController.deleteProduct)
     }
 }

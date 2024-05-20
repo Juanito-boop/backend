@@ -12,7 +12,7 @@ class TokenRuta {
 
   public lasRutas(): void {
     // /api/public/token
-    this.tokenRutaApi.post("/tokencreado", TokenController.createToken);
+    this.tokenRutaApi.post("/", TokenController.createToken);
   }
 }
 const tokenRuta = new TokenRuta();

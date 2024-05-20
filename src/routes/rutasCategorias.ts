@@ -16,9 +16,9 @@ class RutasCategorias {
     
     public rutas() {
         // /api/public/categorias
+        this.rutasApi.post("/", categoriaController.insertCategory);
         this.rutasApi.get("/:tienda", categoriaController.getStoreCategories);
         this.rutasApi.get("/:tienda/:idCategoria", categoriaController.getFilteredCategoryByStoreAndId);
-        this.rutasApi.post("/", categoriaController.insertCategory);
         this.rutasApi.patch("/:tienda/:idCategoria", categoriaController.patchStoreCategory);
         this.rutasApi.delete("/:tienda/:idCategoria", categoriaController.deleteStoreCategoryId);
     }   

@@ -22,24 +22,12 @@ class Rutas {
     public rutas() {
         //cargar los controladorespara el manejo de la info
         // no pasa nada si la ruta es diferente y lo unico igual debe ser el idecita
-        this.rutasApi.get(
-            "/listarUsuario",
-            ControladorUsuarioListar.listarTodosUsuario
-        );
-        this.rutasApi.post(
-            "/crearUsuario",
-            ControladorUsuarioCrear.postUsuario
-        );
-        this.rutasApi.put(
-            "/editarUsuario",
-            ControladorUsuarioEditar.editarUsuario
-        );
-        this.rutasApi.get("/listarUSRol", ControladorUSRolListar.listarUSRol);
-        this.rutasApi.get(
-            "/listarInfo/:idecita",
-            ControladorTiendaInfo.listarInfo
-        );
+        this.rutasApi.post("/", ControladorUsuarioCrear.postUsuario);
+        this.rutasApi.get("/", ControladorUsuarioListar.listarTodosUsuario);
+        this.rutasApi.get("/:idRol", ControladorUSRolListar.listarUSRol);
+        this.rutasApi.get("/listarInfo/:idecita", ControladorTiendaInfo.listarInfo);
         // this.rutasApi.get("/listarPorId/:idecita", listarID.listarID);
+        this.rutasApi.put("/editarUsuario", ControladorUsuarioEditar.editarUsuario);
     }
 }
 

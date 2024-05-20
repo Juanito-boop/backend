@@ -20,10 +20,10 @@ class Rutas {
     public rutas() {
         //cargar los controladorespara el manejo de la info
         // no pasa nada si la ruta es diferente y lo unico igual debe ser el idecita
-        this.rutasApi.get("/listarRol", ControladorRolListar.listarTodosRol);
-        this.rutasApi.post("/crearRol", ControladorRolCrear.postRol);
-        this.rutasApi.put("/editarRol", ControladorRolEditar.editarRol);
-        this.rutasApi.get("/listarPorId/:idecita", ListarID.listarID);
+        this.rutasApi.post("/", ControladorRolCrear.postRol);
+        this.rutasApi.get("/", ControladorRolListar.listarTodosRol);
+        this.rutasApi.get("/:idRol", ListarID.listarID);
+        this.rutasApi.patch("/:idRol", ControladorRolEditar.editarRol);
     }
 }
 

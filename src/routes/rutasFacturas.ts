@@ -16,12 +16,12 @@ class RutasFacturas {
     
     public rutas() {
         // /api/public/facturas
+        this.rutasApi.post("/", controladorFacturas.insertInvoice);
         this.rutasApi.get("/:tienda", controladorFacturas.getStoreInvoices);
-        this.rutasApi.get("/:tienda/:idFactura", controladorFacturas.getFilteredInvoicesByStoreAndId);
         this.rutasApi.get("/:tienda/annual", controladorFacturas.getStoreAnnualInvoices);
         this.rutasApi.get("/:tienda/monthly", controladorFacturas.getStoreMonthlyInvoices);
         this.rutasApi.get("/:tienda/daily", controladorFacturas.getStoreDailyInvoices);
-        this.rutasApi.post("/", controladorFacturas.insertInvoice);
+        this.rutasApi.get("/:tienda/:idFactura", controladorFacturas.getFilteredInvoicesByStoreAndId);
         this.rutasApi.patch("/:tienda/:idFactura", controladorFacturas.patchStoreInvoice);
         this.rutasApi.delete("/:tienda/:idFactura", controladorFacturas.deleteStoreInvoiceId);
     }
