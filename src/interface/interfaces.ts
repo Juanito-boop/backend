@@ -58,7 +58,13 @@ export interface DetalleFactura {
 
 export interface Token {
   username: string;
-  password: number;
+  password: string;
+}
+
+export interface DataToken{
+  username: string;
+  id_tienda: number;
+  nombre_rol: string;
 }
 
 export interface Empleados{

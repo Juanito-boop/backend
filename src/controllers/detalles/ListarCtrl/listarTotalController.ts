@@ -6,7 +6,7 @@ import { SQL_DETALLES } from "../../../repository/detalles/detallesCRUD";
 class listarTotalF extends listarTotal {
   public listarT(req: Request, res: Response) {
       const sql_listar = SQL_DETALLES.LISTAR;
-      const tienda = req.params.tienda;
+      const tienda = req.params.idTienda;
       listarTotalF.listarTotal(sql_listar, tienda, res);
   }
 }

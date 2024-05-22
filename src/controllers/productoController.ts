@@ -19,20 +19,37 @@ class productoController {
   };
 
   public static async fetchProducts(req: Request, res: Response) {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
+
+    if (isNaN(tienda)) {
+      res.status(400).json({ Respuesta: "El id de la tienda debe ser un número" });
+      return;
+    }
+
     productoDAO.fetchProducts(tienda, res);
   };
 
   public static async filterProductById(req: Request, res: Response) {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idProducto: number = parseInt(req.params.idProducto);
+
+    if (isNaN(tienda) || isNaN(idProducto)) {
+      res.status(400).json({ Respuesta: "El id de la tienda y del producto deben ser números" });
+      return;
+    }
+
     productoDAO.filterProductById(tienda, idProducto, res);
   };
 
   public static async updateProduct(req: Request, res: Response) {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idProducto: number = parseInt(req.params.idProducto);
     const fieldsToUpdate: Producto = req.body;
+
+    if (isNaN(tienda) || isNaN(idProducto)) {
+      res.status(400).json({ Respuesta: "El id de la tienda y del producto deben ser números" });
+      return;
+    }
 
     if (Object.keys(fieldsToUpdate).length === 0) {
       res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
@@ -47,8 +64,14 @@ class productoController {
   };
 
   public static async deleteProduct(req: Request, res: Response) {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idProducto: number = parseInt(req.params.idProducto);
+
+    if (isNaN(tienda) || isNaN(idProducto)) {
+      res.status(400).json({ Respuesta: "El id de la tienda y del producto deben ser números" });
+      return;
+    }
+    
     try {
       productoDAO.deleteProduct(tienda, idProducto, res)
     } catch (error) {

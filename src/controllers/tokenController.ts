@@ -3,13 +3,17 @@ import { Token } from "../interface/interfaces";
 import tokenDAO from "../dao/tokenDAO";
 
 class tokenController {
-  public createToken(req: Request, res: Response): void {
+  public async createToken(req: Request, res: Response): Promise<void> {
     const { username, password } = req.body;
-    let data: Token[] = [
-      username,
-      password
-    ];
-    tokenDAO.generateToken(data, res);
+    const data: Token[] = [username, password];
+
+    const result = await tokenDAO.generateToken(data);
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ respuesta: result.errorValue() });
+    }
   }
 }
 

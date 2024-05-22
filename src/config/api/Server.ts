@@ -1,17 +1,17 @@
-import express from "express";
-import cors from "cors";
-import { config } from "dotenv";
-import morgan from "morgan";
+import   cors      from "cors";
+import { config  } from "dotenv";
+import   express   from "express";
+import   morgan    from "morgan";
 
+import seguridad       from "../../middleware/Seguridad";
 import rutasCategorias from "../../routes/rutasCategorias";
-import rutasFacturas from "../../routes/rutasFacturas";
-import rutasProductos from "../../routes/rutasProductos";
-import rutasRol from "../../routes/rutasRol";
-import rutasTienda from "../../routes/rutasTienda";
-import rutasUsuario from "../../routes/rutasUsuario";
-import tokenRuta from "../../routes/TokenRuta";
-import seguridad from "../../middleware/Seguridad";
-import rutasDetalles from "../../routes/rutasDetalles";
+import rutasDetalles   from "../../routes/rutasDetalles";
+import rutasFacturas   from "../../routes/rutasFacturas";
+import rutasProductos  from "../../routes/rutasProductos";
+import rutasRol        from "../../routes/rutasRol";
+import rutasTienda     from "../../routes/rutasTienda";
+import rutasUsuario    from "../../routes/rutasUsuario";
+import tokenRuta       from "../../routes/TokenRuta"      ;
 
 class Servidor {
     public app: express.Application;

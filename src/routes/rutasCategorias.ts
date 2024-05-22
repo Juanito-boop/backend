@@ -17,10 +17,10 @@ class RutasCategorias {
     public rutas() {
         // /api/public/categorias
         this.rutasApi.post("/", categoriaController.insertCategory);
-        this.rutasApi.get("/:tienda", categoriaController.getStoreCategories);
-        this.rutasApi.get("/:tienda/:idCategoria", categoriaController.getFilteredCategoryByStoreAndId);
-        this.rutasApi.patch("/:tienda/:idCategoria", categoriaController.patchStoreCategory);
-        this.rutasApi.delete("/:tienda/:idCategoria", categoriaController.deleteStoreCategoryId);
+        this.rutasApi.get("/:idTienda", categoriaController.getStoreCategories);
+        this.rutasApi.get("/:idTienda/:idCategoria", categoriaController.getFilteredCategoryByStoreAndId);
+        this.rutasApi.patch("/:idTienda/:idCategoria", categoriaController.patchStoreCategory);
+        this.rutasApi.delete("/:idTienda/:idCategoria", categoriaController.deleteStoreCategoryId);
     }   
 }
 const misRutas = new RutasCategorias();

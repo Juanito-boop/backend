@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import controladorFacturas from "../controllers/FacturaController"
+import controladorFacturas from "../controllers/facturaController"
 
 class RutasFacturas {
     public rutasApi: Router;
@@ -17,13 +17,13 @@ class RutasFacturas {
     public rutas() {
         // /api/public/facturas
         this.rutasApi.post("/", controladorFacturas.insertInvoice);
-        this.rutasApi.get("/:tienda", controladorFacturas.getStoreInvoices);
-        this.rutasApi.get("/:tienda/annual", controladorFacturas.getStoreAnnualInvoices);
-        this.rutasApi.get("/:tienda/monthly", controladorFacturas.getStoreMonthlyInvoices);
-        this.rutasApi.get("/:tienda/daily", controladorFacturas.getStoreDailyInvoices);
-        this.rutasApi.get("/:tienda/:idFactura", controladorFacturas.getFilteredInvoicesByStoreAndId);
-        this.rutasApi.patch("/:tienda/:idFactura", controladorFacturas.patchStoreInvoice);
-        this.rutasApi.delete("/:tienda/:idFactura", controladorFacturas.deleteStoreInvoiceId);
+        this.rutasApi.get("/:idTienda", controladorFacturas.getStoreInvoices);
+        this.rutasApi.get("/:idTienda/annual", controladorFacturas.getStoreAnnualInvoices);
+        this.rutasApi.get("/:idTienda/monthly", controladorFacturas.getStoreMonthlyInvoices);
+        this.rutasApi.get("/:idTienda/daily", controladorFacturas.getStoreDailyInvoices);
+        this.rutasApi.get("/:idTienda/:idFactura", controladorFacturas.getFilteredInvoicesByStoreAndId);
+        this.rutasApi.patch("/:idTienda/:idFactura", controladorFacturas.patchStoreInvoice);
+        this.rutasApi.delete("/:idTienda/:idFactura", controladorFacturas.deleteStoreInvoiceId);
     }
 }
 const misRutas = new RutasFacturas();

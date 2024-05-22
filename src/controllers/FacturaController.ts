@@ -15,20 +15,37 @@ class FacturaController {
   }
 
   public getStoreInvoices(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
+
+    if (isNaN(tienda)) {
+      res.status(400).json({ Respuesta: "El id de la tienda debe ser un número" });
+      return;
+    }
+
     FacturaDAO.fetchStoreInvoices(tienda, res);
   }
   
   public getFilteredInvoicesByStoreAndId(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idFactura: number = parseInt(req.params.idFactura);
+    
+    if (isNaN(tienda) || isNaN(idFactura)) {
+      res.status(400).json({ Respuesta: "El id de la tienda y de la factura deben ser números" });
+      return;
+    }
+
     FacturaDAO.filterInvoiceIdByStore(tienda, idFactura, res);
   }
 
   public patchStoreInvoice(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idFactura: number = parseInt(req.params.idFactura);
     const fieldsToUpdate: Factura = req.body;
+
+    if (isNaN(tienda) || isNaN(idFactura)) {
+      res.status(400).json({ Respuesta: "El id de la tienda y de la factura deben ser números" });
+      return;
+    }
 
     if (Object.keys(fieldsToUpdate).length === 0) {
       res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
@@ -43,8 +60,14 @@ class FacturaController {
   }
 
   public deleteStoreInvoiceId(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idFactura: number = parseInt(req.params.idFactura);
+
+    if (isNaN(tienda) || isNaN(idFactura)) {
+      res.status(400).json({ Respuesta: "El id de la tienda y de la factura deben ser números" });
+      return;
+    }
+
     try {
       FacturaDAO.deleteInvoice(tienda, idFactura, res)
     } catch (error) {
@@ -53,17 +76,35 @@ class FacturaController {
   }
 
   public getStoreAnnualInvoices(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
+
+    if (isNaN(tienda)) {
+      res.status(400).json({ Respuesta: "El id de la tienda debe ser un número" });
+      return;
+    }
+
     FacturaDAO.countInvoicesTypeByStore(tienda, 'anual', res);
   }
 
   public getStoreMonthlyInvoices(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
+
+    if (isNaN(tienda)) {
+      res.status(400).json({ Respuesta: "El id de la tienda debe ser un número" });
+      return;
+    }
+    
     FacturaDAO.countInvoicesTypeByStore(tienda, 'mensual', res);
   }
 
   public getStoreDailyInvoices(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
+
+    if (isNaN(tienda)) {
+      res.status(400).json({ Respuesta: "El id de la tienda debe ser un número" });
+      return;
+    }
+
     FacturaDAO.countInvoicesTypeByStore(tienda, 'diaria', res);
   }
 }

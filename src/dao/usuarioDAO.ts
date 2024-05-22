@@ -28,12 +28,22 @@ export default class UsuarioDAO {
     }
   }
 
-  public static async updateUser(fieldsToUpdate: { [key: string]: any }, idUsuario: number, res: Response) {
+  public static async filterUserByStoreAndId(tienda: number, idUsuario: number, res: Response) {
+    try {
+      const result: Usuario | null = await pool.oneOrNone(SQL_USUARIO.findUserByStoreAndId, [idUsuario, tienda]);
+      res.status(200).json(result);
+    }catch(error){
+      res.status(400).json({ Respuesta: `No se puede obtener el usuario, ${error}` });
+      return null;
+    }
+  }
+
+  public static async updateUser(fieldsToUpdate: { [key: string]: any }, idUsuario: number, tienda: number, res: Response) {
     if (Object.keys(fieldsToUpdate).length === 0) {
       res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
     }
 
-    const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, idUsuario);
+    const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, [idUsuario, tienda]);
 
     if (!existingUser) {
       res.status(404).json({ Respuesta: "Usuario no encontrado" });
@@ -46,9 +56,9 @@ export default class UsuarioDAO {
         .join(", ");
       
       const values = Object.values(fieldsToUpdate);
-      values.push(idUsuario);
+      values.push(idUsuario, tienda);
 
-      const sqlUpdate = `UPDATE usuarios SET ${setClause} WHERE id_usuario = $${values.length}`;
+      const sqlUpdate = `UPDATE usuarios SET ${setClause} WHERE id_usuario = $${values.length - 1} AND id_tienda = $${values.length}`;
 
       const result = await pool.result(sqlUpdate, values);
 
@@ -62,8 +72,8 @@ export default class UsuarioDAO {
     }
   }
 
-  public static async deleteUser(idUsuario: number, res: Response) {
-    const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, idUsuario);
+  public static async deleteUser(tienda: number, idUsuario: number, res: Response) {
+    const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, [idUsuario, tienda]);
 
     if (!existingUser) {
       res.status(404).json({ Respuesta: "Usuario no encontrado" });
@@ -72,7 +82,7 @@ export default class UsuarioDAO {
 
     try {
       await pool.task(async (consulta) => {
-        return await consulta.none(SQL_USUARIO.deleteUser, idUsuario);
+        return await consulta.none(SQL_USUARIO.deleteUser, [idUsuario, tienda]);
       });
 
       res.status(200).json({ Respuesta: "Usuario eliminado" });

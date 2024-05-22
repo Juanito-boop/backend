@@ -14,20 +14,37 @@ class CategoriaController{
   }
 
   public getStoreCategories(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
+
+    if (isNaN(tienda)) {
+      res.status(400).json({ Respuesta: "El id de la tienda no es un numero" });
+      return;
+    }
+
     CategoriaDAO.fetchCategories(tienda, res);
   }
 
   public getFilteredCategoryByStoreAndId(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idCategoria: number = parseInt(req.params.idCategoria);
+
+    if (isNaN(tienda) || isNaN(idCategoria)) {
+      res.status(400).json({ Respuesta: "El id de la tienda o de la categoria no es un numero" });
+      return;
+    }
+
     CategoriaDAO.filterCategoryIdByStore(tienda, idCategoria, res);
   }
 
   public patchStoreCategory(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idCategoria: number = parseInt(req.params.idCategoria);
     const fieldsToUpdate: Categoria = req.body;
+
+    if (isNaN(tienda) || isNaN(idCategoria)) {
+      res.status(400).json({ Respuesta: "El id de la tienda o de la categoria no es un numero" });
+      return;
+    }
 
     if (Object.keys(fieldsToUpdate).length === 0) {
       res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
@@ -42,8 +59,14 @@ class CategoriaController{
   }
 
   public deleteStoreCategoryId(req: Request, res: Response): void {
-    const tienda: number = parseInt(req.params.tienda);
+    const tienda: number = parseInt(req.params.idTienda);
     const idCategoria: number = parseInt(req.params.idCategoria);
+
+    if (isNaN(tienda) || isNaN(idCategoria)) {
+      res.status(400).json({ Respuesta: "El id de la tienda o de la categoria no es un numero" });
+      return;
+    }
+    
     try {
       CategoriaDAO.deleteCategory(tienda, idCategoria, res)
     } catch (error) {

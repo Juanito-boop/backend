@@ -65,12 +65,13 @@ export const SQL_TOKEN ={
 export const SQL_USUARIO = {
     fetchUsers: "SELECT * FROM usuarios where id_tienda = $1",
     insertUser: "INSERT INTO usuarios (username, password, id_tienda, id_rol) VALUES($1,$2,$3,$4) RETURNING id_usuario",
-    checkUserExists: "SELECT 1 FROM usuarios WHERE id_usuario = $1",
+    checkUserExists: "SELECT 1 FROM usuarios WHERE id_usuario = $1 AND id_tienda = $2",
     isUserDuplicate: "SELECT COUNT(u.id_usuario) AS cantidad FROM usuarios u WHERE lower(u.username) = lower($1) and lower(u.password) = lower($2) and u.id_tienda = $3 and u.id_rol = $4",
     updateUser: "UPDATE usuarios SET username = $1,password= $2,id_tienda= $3,id_rol=$4 WHERE id_usuario = $5",
     roleUsersCount: "SELECT r.nombre_rol, COUNT(ru.id_usuario) FROM roles r JOIN roles_usuarios ru ON r.id_rol = ru.id_rol GROUP BY r.nombre_rol;",
     findUserByUsernameAndPassword: "SELECT * FROM usuarios WHERE username = $1 AND password = $2;",
     getUsersByStoreId: "SELECT * FROM usuarios WHERE id_tienda=$1",
     findUserById: "SELECT * FROM usuarios WHERE id_usuario=$1",
-    deleteUser: "DELETE FROM usuarios WHERE id_usuario = $1",
+    findUserByStoreAndId: "SELECT * FROM usuarios WHERE id_usuario=$1 AND id_tienda=$2",
+    deleteUser: "DELETE FROM usuarios WHERE id_usuario = $1 and id_tienda = $2",
 };

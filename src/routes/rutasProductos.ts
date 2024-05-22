@@ -13,10 +13,10 @@ class RutasProductos {
     }
     public rutas() {
         this.rutasApi.post("/", ProductoController.createProduct)
-        this.rutasApi.get("/:tienda", ProductoController.fetchProducts)
-        this.rutasApi.get("/:tienda/:idProducto", ProductoController.filterProductById)
-        this.rutasApi.patch("/:tienda/:idProducto", ProductoController.updateProduct)
-        this.rutasApi.delete("/:tienda/:idProducto", ProductoController.deleteProduct)
+        this.rutasApi.get("/:idTienda", ProductoController.fetchProducts)
+        this.rutasApi.get("/:idTienda/:idProducto", ProductoController.filterProductById)
+        this.rutasApi.patch("/:idTienda/:idProducto", ProductoController.updateProduct)
+        this.rutasApi.delete("/:idTienda/:idProducto", ProductoController.deleteProduct)
     }
 }
 const misRutas = new RutasProductos();
