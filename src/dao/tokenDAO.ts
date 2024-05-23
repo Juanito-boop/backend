@@ -25,7 +25,7 @@ export default class tokenDAO {
         { expiresIn: "8h" }
       );
 
-      return Result.ok(token);
+      return Result.succes(token);
     } catch (error) {
       return Result.fail(`No se puede generar el token, ${(error as Error).message}`);
     }

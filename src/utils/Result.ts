@@ -30,7 +30,7 @@ class Result<T> {
     return this.error as string;
   }
 
-  public static ok<U>(value?: U): Result<U> {
+  public static succes<U>(value?: U): Result<U> {
     return new Result<U>(true, undefined, value);
   }
 

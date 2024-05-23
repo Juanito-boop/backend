@@ -12,7 +12,7 @@ export default class rolDAO {
         return Result.fail("No se pudo crear el rol");
       }
 
-      return Result.ok("Rol creado con éxito");
+      return Result.succes("Rol creado con éxito");
     } catch (error) {
       return Result.fail(`No se puede crear el rol, ${(error as Error).message}`);
     }

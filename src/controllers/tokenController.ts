@@ -10,7 +10,7 @@ class tokenController {
     const result = await tokenDAO.generateToken(data);
 
     if (result.isSuccess) {
-      res.status(200).json(result.getValue());
+      res.status(200).json(result.getValue())
     } else {
       res.status(400).json({ respuesta: result.errorValue() });
     }

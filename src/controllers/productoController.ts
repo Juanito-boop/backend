@@ -1,9 +1,9 @@
-import { Request, Response} from 'express';
+import { Request, Response } from 'express';
 import { Producto } from '../interface/interfaces';
 import productoDAO from '../dao/productoDAO';
 
-class productoController {
-  public static async createProduct(req: Request, res: Response) {
+class ProductoController {
+  public static async createProduct(req: Request, res: Response): Promise<void> {
     const { nombre, marca, precio_unitario, fecha_caducidad, descripcion, stock, id_categoria, id_tienda } = req.body;
     const data: Producto[] = [ 
       nombre, 
@@ -15,10 +15,16 @@ class productoController {
       id_categoria, 
       id_tienda 
     ];
-    productoDAO.insertProduct(data, res);
-  };
+    const result = await productoDAO.insertProduct(data);
 
-  public static async fetchProducts(req: Request, res: Response) {
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
+  }
+
+  public static async fetchProducts(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
 
     if (isNaN(tienda)) {
@@ -26,10 +32,16 @@ class productoController {
       return;
     }
 
-    productoDAO.fetchProducts(tienda, res);
-  };
+    const result = await productoDAO.fetchProducts(tienda);
 
-  public static async filterProductById(req: Request, res: Response) {
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
+  }
+
+  public static async filterProductById(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
     const idProducto: number = parseInt(req.params.idProducto);
 
@@ -38,10 +50,16 @@ class productoController {
       return;
     }
 
-    productoDAO.filterProductById(tienda, idProducto, res);
-  };
+    const result = await productoDAO.filterProductById(tienda, idProducto);
 
-  public static async updateProduct(req: Request, res: Response) {
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
+  }
+
+  public static async updateProduct(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
     const idProducto: number = parseInt(req.params.idProducto);
     const fieldsToUpdate: Producto = req.body;
@@ -51,19 +69,16 @@ class productoController {
       return;
     }
 
-    if (Object.keys(fieldsToUpdate).length === 0) {
-      res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
-      return;
-    }
+    const result = await productoDAO.updateProduct(fieldsToUpdate, idProducto, tienda);
 
-    try {
-      productoDAO.updateProduct(fieldsToUpdate, idProducto, tienda, res);
-    } catch (error) {
-      res.status(500).json({ Respuesta: "Error actualizando el producto", error });
+    if (result.isSuccess) {
+      res.status(200).json({ Respuesta: "Producto actualizado" });
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
     }
-  };
+  }
 
-  public static async deleteProduct(req: Request, res: Response) {
+  public static async deleteProduct(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
     const idProducto: number = parseInt(req.params.idProducto);
 
@@ -71,14 +86,15 @@ class productoController {
       res.status(400).json({ Respuesta: "El id de la tienda y del producto deben ser números" });
       return;
     }
-    
-    try {
-      productoDAO.deleteProduct(tienda, idProducto, res)
-    } catch (error) {
-      res.status(500).json({ Respuesta: "Error eliminando el producto", error });
+
+    const result = await productoDAO.deleteProduct(tienda, idProducto);
+
+    if (result.isSuccess) {
+      res.status(200).json({ Respuesta: "Producto eliminado" });
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
     }
-  };
+  }
 }
 
-const ProductoController = productoController;
 export default ProductoController;

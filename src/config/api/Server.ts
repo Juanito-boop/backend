@@ -16,7 +16,7 @@ import tokenRuta       from "../../routes/TokenRuta"      ;
 class Servidor {
     public app: express.Application;
     public port: String;
-    api:string = "/api/public/"
+    v1:string = "/api/v1/public"
 
     constructor() {
         this.app = express();
@@ -35,14 +35,14 @@ class Servidor {
     }
 
     public activarRutas(): void {
-        this.app.use(`${this.api}categorias`, seguridad.revisar, rutasCategorias);// listo
-        this.app.use(`${this.api}detalles`, seguridad.revisar, rutasDetalles);
-        this.app.use(`${this.api}facturas`, seguridad.revisar, rutasFacturas);// listo
-        this.app.use(`${this.api}productos`, seguridad.revisar, rutasProductos);// listo
-        this.app.use(`${this.api}roles`, seguridad.revisar, rutasRol);
-        this.app.use(`${this.api}tiendas`, seguridad.revisar, rutasTienda);// listo
-        this.app.use(`${this.api}token`, tokenRuta);// listo
-        this.app.use(`${this.api}usuarios`, seguridad.revisar, rutasUsuario);
+        this.app.use(`${this.v1}/categorias`, seguridad.revisar, rutasCategorias);// listo
+        this.app.use(`${this.v1}/detalles`, seguridad.revisar, rutasDetalles);
+        this.app.use(`${this.v1}/facturas`, seguridad.revisar, rutasFacturas);// listo
+        this.app.use(`${this.v1}/productos`, seguridad.revisar, rutasProductos);// listo
+        this.app.use(`${this.v1}/roles`, seguridad.revisar, rutasRol);
+        this.app.use(`${this.v1}/tiendas`, seguridad.revisar, rutasTienda);// listo
+        this.app.use(`${this.v1}/token`, tokenRuta);// listo
+        this.app.use(`${this.v1}/usuarios`, seguridad.revisar, rutasUsuario);
     }    
     
     public arrancar(): void {
