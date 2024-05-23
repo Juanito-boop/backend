@@ -54,7 +54,8 @@ export const SQL_TIENDAS = {
     isStoreDuplicate: "SELECT COUNT(*) > 0 AS exists FROM tiendas WHERE lower(nombre_tienda) = lower($1) and lower(direccion_tienda) = lower($2) and lower(telefono_tienda) = lower($3) and lower(propietario_tienda) = lower($4)",
     getStores: "SELECT id_tienda, nombre_tienda, direccion_tienda, telefono_tienda FROM tiendas",
     getStoreById: "SELECT id_tienda, nombre_tienda, direccion_tienda, telefono_tienda FROM tiendas WHERE id_tienda = $1",
-    employeeCounter: 'SELECT t.id_tienda as "id", t.nombre_tienda as "tienda", COUNT(u.id_usuario)::integer as "# empleados" FROM tiendas t JOIN usuarios u ON t.id_tienda = u.id_tienda GROUP BY t.id_tienda, t.nombre_tienda ORDER BY t.id_tienda ASC',
+    employeeCounter: `SELECT t.id_tienda as "id", t.nombre_tienda as "tienda", COUNT(u.id_usuario)::integer as "# empleados" FROM tiendas t JOIN usuarios u ON t.id_tienda = u.id_tienda GROUP BY t.id_tienda, t.nombre_tienda ORDER BY t.id_tienda ASC LIMIT $1 OFFSET $2;`,
+    countTotalRecords:"SELECT COUNT(*) FROM usuarios",
     deleteStore: "DELETE FROM tiendas WHERE id_tienda = $1",
 }
 
@@ -63,7 +64,7 @@ export const SQL_TOKEN ={
 };
 
 export const SQL_USUARIO = {
-    fetchUsers: "SELECT * FROM usuarios where id_tienda = $1",
+    fetchUsers: "SELECT id_usuario, username, password, id_tienda, id_rol FROM usuarios WHERE id_tienda = $1 ORDER BY id_rol ASC, id_usuario ASC",
     insertUser: "INSERT INTO usuarios (username, password, id_tienda, id_rol) VALUES($1,$2,$3,$4) RETURNING id_usuario",
     checkUserExists: "SELECT 1 FROM usuarios WHERE id_usuario = $1 AND id_tienda = $2",
     isUserDuplicate: "SELECT COUNT(u.id_usuario) AS cantidad FROM usuarios u WHERE lower(u.username) = lower($1) and lower(u.password) = lower($2) and u.id_tienda = $3 and u.id_rol = $4",
