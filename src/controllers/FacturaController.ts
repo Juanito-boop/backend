@@ -3,18 +3,24 @@ import FacturaDAO from "../dao/FacturaDAO";
 import { Factura } from "../interface/interfaces";
 
 class FacturaController {
-  public insertInvoice(req: Request, res: Response): void {
+  public async insertInvoice(req: Request, res: Response): Promise<void> {
     const { fecha_venta, vendedor_factura, cantidad_producto, id_tienda } = req.body;
-    const data: Factura[] = [ 
-      fecha_venta, 
-      vendedor_factura, 
-      cantidad_producto, 
-      id_tienda 
+    const data: Factura[] = [
+      fecha_venta,
+      vendedor_factura,
+      cantidad_producto,
+      id_tienda
     ];
-    FacturaDAO.insertInvoice(data, res);
+    const result = await FacturaDAO.insertInvoice(data);
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public getStoreInvoices(req: Request, res: Response): void {
+  public async getStoreInvoices(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
 
     if (isNaN(tienda)) {
@@ -22,22 +28,34 @@ class FacturaController {
       return;
     }
 
-    FacturaDAO.fetchStoreInvoices(tienda, res);
+    const result = await FacturaDAO.fetchStoreInvoices(tienda);
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
-  
-  public getFilteredInvoicesByStoreAndId(req: Request, res: Response): void {
+
+  public async getFilteredInvoicesByStoreAndId(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
     const idFactura: number = parseInt(req.params.idFactura);
-    
+
     if (isNaN(tienda) || isNaN(idFactura)) {
       res.status(400).json({ Respuesta: "El id de la tienda y de la factura deben ser números" });
       return;
     }
 
-    FacturaDAO.filterInvoiceIdByStore(tienda, idFactura, res);
+    const result = await FacturaDAO.filterInvoiceIdByStore(tienda, idFactura);
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public patchStoreInvoice(req: Request, res: Response): void {
+  public async patchStoreInvoice(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
     const idFactura: number = parseInt(req.params.idFactura);
     const fieldsToUpdate: Factura = req.body;
@@ -52,14 +70,16 @@ class FacturaController {
       return;
     }
 
-    try {
-      FacturaDAO.updateInvoice(fieldsToUpdate, idFactura, tienda, res);
-    } catch (error) {
-      res.status(500).json({ Respuesta: "Error actualizando la factura", error });
+    const result = await FacturaDAO.updateInvoice(fieldsToUpdate, idFactura, tienda);
+
+    if (result.isSuccess) {
+      res.status(200).json({ Respuesta: result.getValue() });
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
     }
   }
 
-  public deleteStoreInvoiceId(req: Request, res: Response): void {
+  public async deleteStoreInvoiceId(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
     const idFactura: number = parseInt(req.params.idFactura);
 
@@ -68,14 +88,16 @@ class FacturaController {
       return;
     }
 
-    try {
-      FacturaDAO.deleteInvoice(tienda, idFactura, res)
-    } catch (error) {
-      res.status(500).json({ Respuesta: "Error eliminando la factura", error });
+    const result = await FacturaDAO.deleteInvoice(tienda, idFactura);
+
+    if (result.isSuccess) {
+      res.status(200).json({ Respuesta: result.getValue() });
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
     }
   }
 
-  public getStoreAnnualInvoices(req: Request, res: Response): void {
+  public async getStoreAnnualInvoices(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
 
     if (isNaN(tienda)) {
@@ -83,21 +105,33 @@ class FacturaController {
       return;
     }
 
-    FacturaDAO.countInvoicesTypeByStore(tienda, 'anual', res);
+    const result = await FacturaDAO.countInvoicesTypeByStore(tienda, 'anual');
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public getStoreMonthlyInvoices(req: Request, res: Response): void {
+  public async getStoreMonthlyInvoices(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
 
     if (isNaN(tienda)) {
       res.status(400).json({ Respuesta: "El id de la tienda debe ser un número" });
       return;
     }
-    
-    FacturaDAO.countInvoicesTypeByStore(tienda, 'mensual', res);
+
+    const result = await FacturaDAO.countInvoicesTypeByStore(tienda, 'mensual');
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public getStoreDailyInvoices(req: Request, res: Response): void {
+  public async getStoreDailyInvoices(req: Request, res: Response): Promise<void> {
     const tienda: number = parseInt(req.params.idTienda);
 
     if (isNaN(tienda)) {
@@ -105,7 +139,13 @@ class FacturaController {
       return;
     }
 
-    FacturaDAO.countInvoicesTypeByStore(tienda, 'diaria', res);
+    const result = await FacturaDAO.countInvoicesTypeByStore(tienda, 'diaria');
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 }
 
