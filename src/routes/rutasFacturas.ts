@@ -1,6 +1,6 @@
 import { Router } from "express";
 
-import controladorFacturas from "../controllers/facturaController"
+import controladorFacturas from "../controllers/FacturaController"; 
 
 class RutasFacturas {
     public rutasApi: Router;
