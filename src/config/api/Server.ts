@@ -8,10 +8,9 @@ import rutasCategorias from "../../routes/rutasCategorias";
 import rutasDetalles   from "../../routes/rutasDetalles";
 import rutasFacturas   from "../../routes/rutasFacturas";
 import rutasProductos  from "../../routes/rutasProductos";
-import rutasRol        from "../../routes/rutasRol";
 import rutasTienda     from "../../routes/rutasTienda";
 import rutasUsuario    from "../../routes/rutasUsuario";
-import tokenRuta       from "../../routes/TokenRuta"      ;
+import tokenRuta       from "../../routes/TokenRuta";
 
 class Servidor {
     public app: express.Application;
@@ -39,7 +38,6 @@ class Servidor {
         this.app.use(`${this.v1}/detalles`, seguridad.revisar, rutasDetalles);
         this.app.use(`${this.v1}/facturas`, seguridad.revisar, rutasFacturas);// listo
         this.app.use(`${this.v1}/productos`, seguridad.revisar, rutasProductos);// listo
-        this.app.use(`${this.v1}/roles`, seguridad.revisar, rutasRol);
         this.app.use(`${this.v1}/tiendas`, seguridad.revisar, rutasTienda);// listo
         this.app.use(`${this.v1}/token`, tokenRuta);// listo
         this.app.use(`${this.v1}/usuarios`, seguridad.revisar, rutasUsuario);
