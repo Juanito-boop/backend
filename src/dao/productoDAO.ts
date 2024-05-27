@@ -4,9 +4,18 @@ import { SQL_PRODUCTOS } from '../repository/crudSQL';
 import Result from '../utils/Result';
 
 export default class productoDAO {
-  public static async insertProduct(data: Producto[]): Promise<Result<{ id_producto: number }>> {
+  public static async insertProduct(data: Producto[]): Promise<Result<ProductoCreationResult>> {
     try {
-      const existingProduct = await pool.oneOrNone(SQL_PRODUCTOS.isProductDuplicate, data);
+      const existingProduct = await pool.oneOrNone(SQL_PRODUCTOS.isProductDuplicate, [
+        data[0].nombre, 
+        data[0].marca, 
+        data[0].precio_unitario, 
+        data[0].fecha_caducidad, 
+        data[0].descripcion, 
+        data[0].stock, 
+        data[0].id_categoria, 
+        data[0].id_tienda
+      ]);
 
       if (existingProduct?.cantidad > 0) {
         return Result.fail("El producto ya existe");

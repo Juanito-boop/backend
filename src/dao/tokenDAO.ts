@@ -10,7 +10,10 @@ config({ path: "./.env" });
 export default class tokenDAO {
   public static async generateToken(data: Token[]): Promise<Result<string>> {
     try {
-      const result = await pool.result(SQL_TOKEN.getUserToken, data);
+      const result = await pool.result(SQL_TOKEN.getUserToken, [
+        data[0].username, 
+        data[0].password
+      ]);
 
       if (result.rows.length === 0) {
         return Result.fail("No se encontraron registros");

@@ -6,7 +6,12 @@ import Result from "../utils/Result";
 export default class tiendaDAO {
   public static async addNewStore(data: Tienda[]): Promise<Result<TiendaCreationResult>> {
     try {
-      const existingStore: Exists | null = await pool.oneOrNone(SQL_TIENDAS.isStoreDuplicate, data);
+      const existingStore: Exists | null = await pool.oneOrNone(SQL_TIENDAS.isStoreDuplicate, [
+        data[0].nombre_tienda,
+        data[0].direccion_tienda,
+        data[0].telefono_tienda,
+        data[0].propietario_tienda
+      ]);
 
       if (existingStore?.exists) {
         return Result.fail("La tienda ya existe");

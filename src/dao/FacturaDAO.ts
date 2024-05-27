@@ -4,8 +4,13 @@ import { SQL_FACTURAS } from '../repository/crudSQL';
 import Result from '../utils/Result';
 
 export default class FacturaDAO {
-  public static async insertInvoice(data: Factura[]): Promise<Result<{ id_factura: number }>> {
-    const existingInvoice: Exists | null = await pool.oneOrNone(SQL_FACTURAS.isInvoiceDuplicate, data);
+  public static async insertInvoice(data: Factura[]): Promise<Result<FacturaCreationResult>> {
+    const existingInvoice: Exists | null = await pool.oneOrNone(SQL_FACTURAS.isInvoiceDuplicate, [
+      data[0].fecha_venta,
+      data[0].vendedor_factura,
+      data[0].cantidad_producto,
+      data[0].id_tienda
+    ]);
 
     if (existingInvoice?.exists) {
       return Result.fail("La factura ya existe");

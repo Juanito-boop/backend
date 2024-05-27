@@ -5,7 +5,11 @@ import Result from '../utils/Result';
 
 export default class CategoriaDAO {
   public static async insertCategory(data: Categoria[]): Promise<Result<CategoriaCreationResult>> {
-    const existingCategory: Exists | null = await pool.oneOrNone(SQL_CATEGORIAS.isCategoryDuplicate, data);
+    const existingCategory: Exists | null = await pool.oneOrNone(SQL_CATEGORIAS.isCategoryDuplicate, [
+      data[0].nombre,
+      data[0].descripcion,
+      data[0].id_tienda
+    ]);
 
     if (existingCategory?.exists) {
       return Result.fail("La categoria ya existe");
