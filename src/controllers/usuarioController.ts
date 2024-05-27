@@ -3,19 +3,23 @@ import { Usuario } from "../interface/interfaces";
 import UsuarioDAO from "../dao/usuarioDAO";
 
 class usuarioController {
-  public insertUser(req: Request, res: Response){
+  public static async insertUser(req: Request, res: Response): Promise<void>{
     const { username, password, id_tienda, id_rol } = req.body;
     const data: Usuario[] = [
       username,
       password,
       id_tienda,
       id_rol
-    ]
-    
-    UsuarioDAO.createUser(data, res);
+    ];
+    const result = await UsuarioDAO.createUser(data);
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public fetchUsers(req: Request, res: Response){
+  public static async fetchUsers(req: Request, res: Response): Promise<void>{
     const tienda: number = parseInt(req.params.idTienda);
     
     if (isNaN(tienda)) {
@@ -23,10 +27,16 @@ class usuarioController {
       return;
     }
     
-    UsuarioDAO.fetchUsers(tienda, res);
+    const result = await UsuarioDAO.fetchUsers(tienda);
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public findUser(req: Request, res: Response){
+  public static async findUser(req: Request, res: Response): Promise<void>{
     const idUsuario: number = parseInt(req.params.idUsuario);
     const tienda: number = parseInt(req.params.idTienda);
     
@@ -34,11 +44,17 @@ class usuarioController {
       res.status(400).json({ Respuesta: "El id del usuario o de la tienda no es un número válido" });
       return;
     }
-    
-    UsuarioDAO.filterUserByStoreAndId(tienda, idUsuario, res);
+
+    const result = await UsuarioDAO.filterUserByStoreAndId(tienda, idUsuario);
+
+    if (result.isSuccess) {
+      res.status(200).json(result.getValue());
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
+    }
   }
 
-  public patchUser(req: Request, res: Response){
+  public static async patchUser(req: Request, res: Response): Promise<void>{
     const idUsuario: number = parseInt(req.params.idUsuario);
     const tienda: number = parseInt(req.params.idTienda);
     const fieldsToUpdate = req.body;
@@ -47,19 +63,17 @@ class usuarioController {
       res.status(400).json({ Respuesta: "El id del usuario o de la tienda no es un número válido" });
       return;
     }
-    
-    if (Object.keys(fieldsToUpdate).length === 0) {
-      res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
-      return;
-    }
-    try {
-      UsuarioDAO.updateUser(fieldsToUpdate, idUsuario, tienda, res);
-    } catch (error) {
-      res.status(500).json({ Respuesta: "Error actualizando el usuario", error });
+
+    const result = await UsuarioDAO.updateUser(fieldsToUpdate, idUsuario, tienda);
+
+    if (result.isSuccess) {
+      res.status(200).json({ Respuesta: "Usuario actualizado" });
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
     }
   }
 
-  public deleteUser(req: Request, res: Response){
+  public static async deleteUser(req: Request, res: Response): Promise<void>{
     const idUsuario: number = parseInt(req.params.idUsuario);
     const tienda: number = parseInt(req.params.idTienda);
 
@@ -67,11 +81,13 @@ class usuarioController {
       res.status(400).json({ Respuesta: "El id del usuario o de la tienda no es un número válido" });
       return;
     }
+    
+    const result = await UsuarioDAO.deleteUser(tienda, idUsuario);
 
-    try {
-      UsuarioDAO.deleteUser(tienda, idUsuario,  res);
-    } catch (error) {
-      res.status(500).json({ Respuesta: "Error eliminando el usuario", error });
+    if (result.isSuccess) {
+      res.status(200).json({ Respuesta: "Usuario eliminado" });
+    } else {
+      res.status(400).json({ Respuesta: result.errorValue() });
     }
   }
 }

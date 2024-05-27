@@ -2,52 +2,57 @@ import { Response } from "express";
 import pool from "../config/connection/conexion";
 import { Usuario, UsuarioCreationResult } from "../interface/interfaces";
 import { SQL_USUARIO } from "../repository/crudSQL";
+import Result from "../utils/Result";
 
 export default class UsuarioDAO {
-  public static async createUser(data: Usuario[], res: Response) {
+  public static async createUser(data: Usuario[]): Promise<Result<UsuarioCreationResult>> {
     try {
+      const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, [
+        data[0].id_usuario, 
+        data[0].id_tienda
+      ]);
+
+      if (existingUser) {
+        return Result.fail("El usuario ya existe");
+      }
+
       const result: UsuarioCreationResult = await pool.task(async (consulta) => {
-        return await consulta.one(SQL_USUARIO.insertUser, data);
+        return await consulta.one<UsuarioCreationResult>(SQL_USUARIO.insertUser, data);
       });
 
-      res.status(200).json(result);
+      return Result.succes({id_usuario:  result.id_usuario});
     } catch (error) {
-      res.status(400).json({ Respuesta: `No se puede crear el usuario, ${error}` });
+      return Result.fail(`No se puede crear el usuario, ${error}`);
     }
   }
 
-  public static async fetchUsers(tienda: number, res: Response) {
+  public static async fetchUsers(tienda: number): Promise<Result<Usuario[]>> {
     try {
-      const result: Usuario[] = await pool.task(async (consulta) => {
-        return await consulta.many(SQL_USUARIO.fetchUsers, tienda);
-      });
-
-      res.status(200).json(result);
+      const result: Usuario[] = await pool.manyOrNone(SQL_USUARIO.fetchUsers, tienda);
+      return Result.succes(result);
     } catch (error) {
-      res.status(400).json({ Respuesta: `No se puede obtener los usuarios, ${error}` });
+      return Result.fail(`No se puede obtener los usuarios, ${error}`);
     }
   }
 
-  public static async filterUserByStoreAndId(tienda: number, idUsuario: number, res: Response) {
+  public static async filterUserByStoreAndId(tienda: number, idUsuario: number): Promise<Result<Usuario | null>> {
     try {
       const result: Usuario | null = await pool.oneOrNone(SQL_USUARIO.findUserByStoreAndId, [idUsuario, tienda]);
-      res.status(200).json(result);
+      return Result.succes(result);
     }catch(error){
-      res.status(400).json({ Respuesta: `No se puede obtener el usuario, ${error}` });
-      return null;
+      return Result.fail(`No se puede obtener el usuario, ${error}`);
     }
   }
 
-  public static async updateUser(fieldsToUpdate: { [key: string]: any }, idUsuario: number, tienda: number, res: Response) {
+  public static async updateUser(fieldsToUpdate: { [key: string]: any }, idUsuario: number, tienda: number): Promise<Result<void>> {
     if (Object.keys(fieldsToUpdate).length === 0) {
-      res.status(400).json({ Respuesta: "No se proporcionaron campos para actualizar" });
+      return Result.fail("No se proporcionaron campos para actualizar");
     }
 
     const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, [idUsuario, tienda]);
 
     if (!existingUser) {
-      res.status(404).json({ Respuesta: "Usuario no encontrado" });
-      return;
+      return Result.fail("Usuario no encontrado");
     }
 
     try {
@@ -60,34 +65,25 @@ export default class UsuarioDAO {
 
       const sqlUpdate = `UPDATE usuarios SET ${setClause} WHERE id_usuario = $${values.length - 1} AND id_tienda = $${values.length}`;
 
-      const result = await pool.result(sqlUpdate, values);
-
-      if(result.rowCount > 0) {
-        res.status(200).json({ Respuesta: "Usuario actualizado" });
-      } else {
-        res.status(400).json({ Respuesta: "No se pudo actualizar el usuario" });
-      }
+      await pool.query(sqlUpdate, values);
+      return Result.succes();
     } catch (error) {
-      res.status(400).json({ Respuesta: `No se puede actualizar el usuario, ${error}` });
+      return Result.fail(`No se puede actualizar el usuario, ${error}`);
     }
   }
 
-  public static async deleteUser(tienda: number, idUsuario: number, res: Response) {
+  public static async deleteUser(tienda: number, idUsuario: number) {
     const existingUser = await pool.oneOrNone(SQL_USUARIO.checkUserExists, [idUsuario, tienda]);
 
     if (!existingUser) {
-      res.status(404).json({ Respuesta: "Usuario no encontrado" });
-      return;
+      return Result.fail("Usuario no encontrado");
     }
 
     try {
-      await pool.task(async (consulta) => {
-        return await consulta.none(SQL_USUARIO.deleteUser, [idUsuario, tienda]);
-      });
-
-      res.status(200).json({ Respuesta: "Usuario eliminado" });
+      await pool.query(SQL_USUARIO.deleteUser, [idUsuario, tienda]);
+      return Result.succes();
     } catch (error) {
-      res.status(400).json({ Respuesta: `No se puede eliminar el usuario, ${error}` });
+      return Result.fail(`No se puede eliminar el usuario, ${error}`);
     }
   }
 }
