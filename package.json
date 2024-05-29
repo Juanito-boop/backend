@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "pg-promise": "^11.5.4",
+    "portfinder": "^1.0.32",
     "typescript": "^5.4.5"
   },
   "devDependencies": {
