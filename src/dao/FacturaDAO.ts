@@ -5,12 +5,7 @@ import Result from '../utils/Result';
 
 export default class FacturaDAO {
   public static async insertInvoice(data: Factura[]): Promise<Result<FacturaCreationResult>> {
-    const existingInvoice: Exists | null = await pool.oneOrNone(SQL_FACTURAS.isInvoiceDuplicate, [
-      data[0].fecha_venta,
-      data[0].vendedor_factura,
-      data[0].cantidad_producto,
-      data[0].id_tienda
-    ]);
+    const existingInvoice: Exists | null = await pool.oneOrNone(SQL_FACTURAS.isInvoiceDuplicate, data);
 
     if (existingInvoice?.exists) {
       return Result.fail("La factura ya existe");
@@ -21,7 +16,7 @@ export default class FacturaDAO {
         return await consulta.one<FacturaCreationResult>(SQL_FACTURAS.createInvoice, data);
       });
 
-      return Result.succes({ id_factura: result.id_factura });
+      return Result.success({ id_factura: result.id_factura });
     } catch (error) {
       return Result.fail(`No se puede crear la factura, ${error}`);
     }
@@ -30,7 +25,7 @@ export default class FacturaDAO {
   public static async fetchStoreInvoices(tienda: number): Promise<Result<Factura[]>> {
     try {
       const respuesta: Factura[] = await pool.manyOrNone(SQL_FACTURAS.getInvoicesByStoreId, tienda);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar las facturas de la tienda, ${error}`);
     }
@@ -39,7 +34,7 @@ export default class FacturaDAO {
   public static async filterInvoiceIdByStore(tienda: number, id: number): Promise<Result<Factura | null>> {
     try {
       const respuesta: Factura | null = await pool.oneOrNone<Factura>(SQL_FACTURAS.getInvoiceByStoreAndId, [tienda, id]);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar la factura de la tienda, ${error}`);
     }
@@ -69,7 +64,7 @@ export default class FacturaDAO {
       const result = await pool.result(sqlUpdate, values);
 
       if (result.rowCount > 0) {
-        return Result.succes("Factura actualizada");
+        return Result.success("Factura actualizada");
       } else {
         return Result.fail("Factura no encontrada");
       }
@@ -89,7 +84,7 @@ export default class FacturaDAO {
       const result = await pool.result(SQL_FACTURAS.deleteInvoice, [tienda, idFactura]);
 
       if (result.rowCount > 0) {
-        return Result.succes("Factura eliminada correctamente");
+        return Result.success("Factura eliminada correctamente");
       } else {
         return Result.fail("Factura no encontrada");
       }
@@ -114,7 +109,7 @@ export default class FacturaDAO {
     try {
       const result = await pool.result(counterSQLQuery, [tienda]);
       if (result.rowCount > 0) {
-        return Result.succes(result.rows[0]);
+        return Result.success(result.rows[0]);
       } else {
         return Result.fail(`No se encontraron facturas para la tienda ${tienda}`);
       }

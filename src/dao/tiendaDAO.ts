@@ -21,7 +21,7 @@ export default class tiendaDAO {
         return await consulta.one(SQL_TIENDAS.createStore, data);
       });
 
-      return Result.succes({ id_tienda: result.id_tienda });
+      return Result.success({ id_tienda: result.id_tienda });
     } catch (error) {
       return Result.fail(`No se puede crear la tienda, ${error}`);
     }
@@ -30,7 +30,7 @@ export default class tiendaDAO {
   public static async fetchStores(): Promise<Result<Tienda[]>> {
     try {
       const respuesta: Tienda[] = await pool.manyOrNone(SQL_TIENDAS.getStores);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar las tiendas, ${error}`);
     }
@@ -39,7 +39,7 @@ export default class tiendaDAO {
   public static async filterStoreById(idStore: number): Promise<Result<Tienda | null>> {
     try {
       const respuesta: Tienda | null = await pool.oneOrNone<Tienda>(SQL_TIENDAS.getStoreById, idStore);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar la tienda, ${error}`);
     }
@@ -52,7 +52,7 @@ export default class tiendaDAO {
       let nextOffset = offset + limit;
       const moreRecordsAvailable = nextOffset < totalRecords;
       if (respuesta.length > 0 || moreRecordsAvailable) {
-        return Result.succes(respuesta);
+        return Result.success(respuesta);
       } else {
         return Result.fail("No hay más registros disponibles.");
       }
@@ -78,7 +78,7 @@ export default class tiendaDAO {
         .join(", ");
 
       await pool.query(`UPDATE tiendas SET ${setClause} WHERE id_tienda = $${Object.keys(fieldsToUpdate).length + 1}`, [...Object.values(fieldsToUpdate), idStore]);
-      return Result.succes();
+      return Result.success();
     } catch (error) {
       return Result.fail(`Error actualizando la tienda, ${error}`);
     }
@@ -93,7 +93,7 @@ export default class tiendaDAO {
 
     try {
       await pool.query(SQL_TIENDAS.deleteStore, idStore);
-      return Result.succes();
+      return Result.success();
     } catch (error) {
       return Result.fail(`Error eliminando la tienda, ${error}`);
     }

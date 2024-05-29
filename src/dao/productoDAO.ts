@@ -25,7 +25,7 @@ export default class productoDAO {
         return await consulta.one<ProductoCreationResult>(SQL_PRODUCTOS.CREAR, data);
       });
 
-      return Result.succes({ id_producto: result.id_producto });
+      return Result.success({ id_producto: result.id_producto });
     } catch (error) {
       return Result.fail(`No se puede crear el producto, ${error}`);
     }
@@ -34,7 +34,7 @@ export default class productoDAO {
   public static async fetchProducts(tienda: number): Promise<Result<Producto[]>> {
     try {
       const respuesta: Producto[] = await pool.manyOrNone(SQL_PRODUCTOS.getProductsByStoreId, tienda);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar los productos, ${error}`);
     }
@@ -43,7 +43,7 @@ export default class productoDAO {
   public static async filterProductById(tienda: number, idProducto: number): Promise<Result<Producto | null>> {
     try {
       const respuesta: Producto | null = await pool.oneOrNone<Producto>(SQL_PRODUCTOS.LISTARPORID, [tienda, idProducto]);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar el producto, ${error}`);
     }
@@ -69,7 +69,7 @@ export default class productoDAO {
       values.push(tienda, idProducto);
 
       await pool.query(SQL_PRODUCTOS.ACTUALIZAR + setClause, values);
-      return Result.succes();
+      return Result.success();
     } catch (error) {
       return Result.fail(`No se puede actualizar el producto, ${error}`);
     }
@@ -84,7 +84,7 @@ export default class productoDAO {
 
     try {
       await pool.query(SQL_PRODUCTOS.ELIMINAR, idProducto);
-      return Result.succes();
+      return Result.success();
     } catch (error) {
       return Result.fail(`No se puede eliminar el producto, ${error}`);
     }

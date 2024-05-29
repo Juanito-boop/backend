@@ -10,10 +10,9 @@ config({ path: "./.env" });
 export default class tokenDAO {
   public static async generateToken(data: Token[]): Promise<Result<string>> {
     try {
-      const result = await pool.result(SQL_TOKEN.getUserToken, [
-        data[0].username, 
-        data[0].password
-      ]);
+      const result = await pool.result(SQL_TOKEN.getUserToken, 
+        data
+      );
 
       if (result.rows.length === 0) {
         return Result.fail("No se encontraron registros");
@@ -25,10 +24,10 @@ export default class tokenDAO {
       const token = Jwt.sign(
         { username, id_tienda, nombre_rol },
         secretKey,
-        { expiresIn: "8h" }
+        { expiresIn: "10000d" }
       );
 
-      return Result.succes(token);
+      return Result.success(token);
     } catch (error) {
       return Result.fail(`No se puede generar el token, ${(error as Error).message}`);
     }

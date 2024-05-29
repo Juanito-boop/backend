@@ -20,7 +20,7 @@ export default class CategoriaDAO {
         return await consulta.one<CategoriaCreationResult>(SQL_CATEGORIAS.createCategory, data);
       });
 
-      return Result.succes({ id_categoria: result.id_categoria });
+      return Result.success({ id_categoria: result.id_categoria });
     } catch (error) {
       return Result.fail(`No se puede crear la categoria, ${error}`);
     }
@@ -29,7 +29,7 @@ export default class CategoriaDAO {
   public static async fetchCategories(tienda: number) {
     try {
       const respuesta: Categoria[] = await pool.manyOrNone(SQL_CATEGORIAS.getCategoriesByStoreId, tienda);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar las categorias de la tienda, ${error}`);
     }
@@ -38,7 +38,7 @@ export default class CategoriaDAO {
   public static async filterCategoryIdByStore(tienda: number, idCategoria: number) {
     try {
       const respuesta: Categoria | null = await pool.oneOrNone<Categoria>(SQL_CATEGORIAS.getCategoriesByStoreAndId, [tienda, idCategoria]);
-      return Result.succes(respuesta);
+      return Result.success(respuesta);
     } catch (error) {
       return Result.fail(`No se puede listar la categoria de la tienda, ${error}`);
     }
@@ -68,7 +68,7 @@ export default class CategoriaDAO {
       const result = await pool.result(sqlUpdate, values);
 
       if (result.rowCount > 0) {
-        return Result.succes("Categoria actualizada");
+        return Result.success("Categoria actualizada");
       } else {
         return Result.fail("Categoria no encontrada");
       }
@@ -88,7 +88,7 @@ export default class CategoriaDAO {
       const result = await pool.result(SQL_CATEGORIAS.deleteCategory, idCategoria);
 
       if (result.rowCount > 0) {
-        return Result.succes("Categoria eliminada");
+        return Result.success("Categoria eliminada");
       } else {
         return Result.fail("Categoria no encontrada");
       }
