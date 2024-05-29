@@ -1,10 +1,10 @@
-class Result<T> {
+class Result<T, E = string> {
   public isSuccess: boolean;
   public isFailure: boolean;
-  public error: string | null;
+  public error: E | null;
   private value: T | null;
 
-  private constructor(isSuccess: boolean, error?: string, value?: T) {
+  private constructor(isSuccess: boolean, error?: E, value?: T) {
     if (isSuccess && error) {
       throw new Error("InvalidOperation: A result cannot be successful and contain an error");
     }
@@ -26,16 +26,16 @@ class Result<T> {
     return this.value as T;
   }
 
-  public errorValue(): string {
-    return this.error as string;
+  public errorValue(): E {
+    return this.error as E;
   }
 
-  public static succes<U>(value?: U): Result<U> {
+  public static success<U>(value?: U): Result<U> {
     return new Result<U>(true, undefined, value);
   }
 
-  public static fail<U>(error: string): Result<U> {
-    return new Result<U>(false, error);
+  public static fail<U, F>(error: F): Result<U, F> {
+    return new Result<U, F>(false, error);
   }
 }
 
