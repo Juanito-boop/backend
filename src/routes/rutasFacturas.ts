@@ -4,7 +4,7 @@ import controladorFacturas from "../controllers/FacturaController";
 
 class RutasFacturas {
     public rutasApi: Router;
-    
+
     constructor() {
         this.rutasApi = Router();
         this.config();
@@ -13,10 +13,8 @@ class RutasFacturas {
     public config() {
         this.rutas();
     }
-    
+
     public rutas() {
-        // /api/public/facturas
-        this.rutasApi.post("/", controladorFacturas.insertInvoice);
         this.rutasApi.get("/:idTienda", controladorFacturas.getStoreInvoices);
         this.rutasApi.get("/:idTienda/annual", controladorFacturas.getStoreAnnualInvoices);
         this.rutasApi.get("/:idTienda/monthly", controladorFacturas.getStoreMonthlyInvoices);

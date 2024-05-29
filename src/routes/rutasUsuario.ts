@@ -7,22 +7,18 @@ class Rutas {
 
     constructor() {
         this.rutasApi = Router();
-        //cargar el inico de la config de rutas
         this.config();
     }
 
-    public config() {
-        this.rutas();
-    }
-
+    public config() {this.rutas();}
     public rutas() {
-        //cargar los controladorespara el manejo de la info
-        // no pasa nada si la ruta es diferente y lo unico igual debe ser el idecita
         this.rutasApi.post("/", UsuarioController.insertUser);
+        this.rutasApi.post("/many", UsuarioController.insertUsers);
+        this.rutasApi.get("/", UsuarioController.findAllUsers);
         this.rutasApi.get("/:idTienda", UsuarioController.fetchUsers);
         this.rutasApi.get("/:idTienda/:idUsuario", UsuarioController.findUser);
         this.rutasApi.patch("/:idTienda/:idUsuario", UsuarioController.patchUser);
-        this.rutasApi.delete("/:idTienda/:idUsuario", UsuarioController.deleteUser)
+        this.rutasApi.delete("/:idTienda/:idUsuario", UsuarioController.deleteUser);
     }
 }
 

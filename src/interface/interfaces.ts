@@ -48,11 +48,23 @@ export interface Usuario {
   id_rol: number;
 }
 
+export interface UsuarioBulkResult {
+  created: UsuarioCreationResult[];
+  errors: string[];
+}
+
+export interface UsuarioR {
+  id_usuario: number;
+  rol: string;
+  username: string;
+  tienda: string;
+}
+
 export interface DetalleFactura {
-  id_detalle_factura: number;
+  id_detalle_factura?: number;
   cantidad_producto: number;
   fecha_creacion: Date;
-  id_factura: number;
+  id_factura?: number;
   id_producto: number;
 }
 

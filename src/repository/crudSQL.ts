@@ -10,7 +10,7 @@ export const SQL_CATEGORIAS = {
 
 export const SQL_DETALLES = {
     getInvoiceDetailsByStoreAndID: "SELECT * FROM detalles_facturas where id_tienda = $1 and id_factura = $2",
-    insertNewDetail: "INSERT INTO detalles (id, nombre_producto, valor_producto_unitario, valor_producto_total, vendedor, fecha_venta, cantidad_producto, id_tienda) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+    insertNewDetail: "INSERT INTO detalles_facturas (cantidad_producto, fecha_creacion, id_factura, id_producto) VALUES($1, $2, $3, $4)",
 };
 
 export const SQL_FACTURAS = {
@@ -36,7 +36,8 @@ export const SQL_PRODUCTOS = {
     ACTUALIZAR: "UPDATE productos SET nombre = $1, marca = $2, precio_unitario = $3, fecha_caducidad = $4, descripcion = $5, stock = $6, id_categoria = $7, id_tienda = $8 WHERE id_producto = $9",
     VARIEDAD: "SELECT c.nombre, COUNT(DISTINCT p.id_producto) AS num_productos FROM categorias c JOIN productos p ON c.id_categoria = p.id_categoria GROUP BY c.nombre;",
     DATE_SQL: "SELECT f.fecha_venta, SUM(f.cantidad_producto) FROM facturas f WHERE f.fecha_venta BETWEEN $1 AND $2 GROUP BY f.fecha_venta",
-    LISTARPORID: "SELECT * FROM productos WHERE id_tienda = $1",    
+    LISTARPORID: "SELECT * FROM productos WHERE id_tienda = $1",
+    checkProductExistsID: "SELECT 1 FROM productos WHERE id_producto = $1"
 };
 
 export const SQL_ROL = {
@@ -65,13 +66,14 @@ export const SQL_TOKEN ={
 
 export const SQL_USUARIO = {
     fetchUsers: "SELECT id_usuario, username, password, id_tienda, id_rol FROM usuarios WHERE id_tienda = $1 ORDER BY id_rol ASC, id_usuario ASC",
-    insertUser: "INSERT INTO usuarios (username, password, id_tienda, id_rol) VALUES($1,$2,$3,$4) RETURNING id_usuario",
-    checkUserExists: "SELECT 1 FROM usuarios WHERE id_usuario = $1 AND id_tienda = $2",
+    findAllUsers: "SELECT usuarios.id_usuario, roles.nombre_rol as rol, usuarios.username, tiendas.nombre_tienda as tienda FROM usuarios JOIN roles ON usuarios.id_rol = roles.id_rol JOIN tiendas ON usuarios.id_tienda = tiendas.id_tienda;",
+    insertUser: "INSERT INTO usuarios (username, password, id_tienda, id_rol) VALUES($1, $2, $3, $4) RETURNING id_usuario",
+    checkUserExists: "SELECT 1 FROM usuarios WHERE username = $1 and id_tienda = $2",
     isUserDuplicate: "SELECT COUNT(u.id_usuario) AS cantidad FROM usuarios u WHERE lower(u.username) = lower($1) and lower(u.password) = lower($2) and u.id_tienda = $3 and u.id_rol = $4",
     updateUser: "UPDATE usuarios SET username = $1,password= $2,id_tienda= $3,id_rol=$4 WHERE id_usuario = $5",
     roleUsersCount: "SELECT r.nombre_rol, COUNT(ru.id_usuario) FROM roles r JOIN roles_usuarios ru ON r.id_rol = ru.id_rol GROUP BY r.nombre_rol;",
     findUserByUsernameAndPassword: "SELECT * FROM usuarios WHERE username = $1 AND password = $2;",
-    getUsersByStoreId: "SELECT * FROM usuarios WHERE id_tienda=$1",
+    getUsersByStoreId: "SELECT usuarios.id_usuario, roles.nombre_rol as rol, usuarios.username, tiendas.nombre_tienda as tienda FROM usuarios JOIN roles ON usuarios.id_rol = roles.id_rol JOIN tiendas ON usuarios.id_tienda = tiendas.id_tienda WHERE id_tienda=$1",
     findUserById: "SELECT * FROM usuarios WHERE id_usuario=$1",
     findUserByStoreAndId: "SELECT * FROM usuarios WHERE id_usuario=$1 AND id_tienda=$2",
     deleteUser: "DELETE FROM usuarios WHERE id_usuario = $1 and id_tienda = $2",
