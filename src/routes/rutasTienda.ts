@@ -21,17 +21,17 @@ class Rutas {
 		this.rutasApi.post("/", tiendaController.insertStore);
 		this.rutasApi.get(
 			"/",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			tiendaController.fetchStores
 		);
 		this.rutasApi.get(
 			"/empleados",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			tiendaController.fetchEmployeeCounterStores
 		);
 		this.rutasApi.get(
 			"/:idTienda",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			tiendaController.filterStoreById
 		);
 		this.rutasApi.patch("/:idTienda", tiendaController.patchStore);

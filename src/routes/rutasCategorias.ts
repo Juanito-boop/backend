@@ -20,12 +20,12 @@ class RutasCategorias {
 	this.rutasApi.post("/", categoriaController.insertCategory);
 	this.rutasApi.get(
 	  "/:idTienda",
-	  cacheMiddleware(60),
+	  cacheMiddleware(),
 	  categoriaController.getStoreCategories
 	);
 	this.rutasApi.get(
 	  "/:idTienda/:idCategoria",
-	  cacheMiddleware(60),
+	  cacheMiddleware(),
 	  categoriaController.getFilteredCategoryByStoreAndId
 	);
 	this.rutasApi.patch("/:idTienda/:idCategoria", categoriaController.patchStoreCategory);

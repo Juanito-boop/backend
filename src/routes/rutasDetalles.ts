@@ -20,7 +20,7 @@ class RutasDetalles {
 		this.rutasApi.post("/", detallesFacturaController.insertInvoiceWithDetails);
 		this.rutasApi.get(
 			"/:idTienda",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			detallesFacturaController.getStoreInvoices
 		);
 	}

@@ -17,17 +17,17 @@ class RutasProductos {
 		this.rutasApi.post("/", ProductoController.createProduct);
 		this.rutasApi.get(
 			"/:idTienda",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			ProductoController.fetchProducts
 		);
 		this.rutasApi.get(
 			"/:idTienda/counter",
-				cacheMiddleware(60),
+				cacheMiddleware(),
 			ProductoController.productsCounter
 		);
 		this.rutasApi.get(
 			"/:idTienda/:idProducto",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			ProductoController.filterProductById
 		);
 		this.rutasApi.patch("/:idTienda/:idProducto",ProductoController.updateProduct);

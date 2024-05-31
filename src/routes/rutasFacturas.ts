@@ -19,27 +19,27 @@ class RutasFacturas {
 		// /api/v1/public/facturas
 		this.rutasApi.get(
 			"/:idTienda",
-			cacheMiddleware(60),
+			cacheMiddleware(),
 			controladorFacturas.getStoreInvoices
 			);
 		this.rutasApi.get(
 			"/:idTienda/annual",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			controladorFacturas.getStoreAnnualInvoices
 		);
 		this.rutasApi.get(
 			"/:idTienda/monthly",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			controladorFacturas.getStoreMonthlyInvoices
 		);
 		this.rutasApi.get(
 			"/:idTienda/daily",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			controladorFacturas.getStoreDailyInvoices
 		);
 		this.rutasApi.get(
 			"/:idTienda/:idFactura",
-			 cacheMiddleware(60),
+			 cacheMiddleware(),
 			controladorFacturas.getFilteredInvoicesByStoreAndId
 		);
 		this.rutasApi.patch("/:idTienda/:idFactura", controladorFacturas.patchStoreInvoice);

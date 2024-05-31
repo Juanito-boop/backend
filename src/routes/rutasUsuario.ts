@@ -20,17 +20,17 @@ class Rutas {
 	this.rutasApi.post("/many", UsuarioController.insertUsers);
 	this.rutasApi.get(
 	  "/",
-	  cacheMiddleware(60),
+	  cacheMiddleware(),
 	  UsuarioController.findAllUsers
 	);
 	this.rutasApi.get(
 	  "/:idTienda",
-	   cacheMiddleware(60),
+	   cacheMiddleware(),
 	  UsuarioController.fetchUsers
 	);
 	this.rutasApi.get(
 	  "/:idTienda/:idUsuario",
-	   cacheMiddleware(60),
+	   cacheMiddleware(),
 	  UsuarioController.findUser
 	);
 	this.rutasApi.patch("/:idTienda/:idUsuario", UsuarioController.patchUser);
