@@ -7,14 +7,14 @@ const pool = pgp(variablesConexion);
 const dbname = variablesConexion.database;
 
 pool
-  .connect()
-  .then((conn) => {
-    console.log("Conexion exitosa con DB: ", dbname);
+	.connect()
+	.then((conn) => {
+		console.log("Conexion exitosa con DB: ", dbname);
 
-    conn.done();
-  })
-  .catch((mierror) => {
-    console.log(mierror);
-  });
+		conn.done();
+	})
+	.catch((mierror) => {
+		console.log(mierror);
+	});
 
 export default pool;

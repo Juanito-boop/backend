@@ -4,117 +4,117 @@ import { SQL_FACTURAS } from '../repository/crudSQL';
 import Result from '../utils/Result';
 
 export default class FacturaDAO {
-  public static async insertInvoice(data: Factura[]): Promise<Result<FacturaCreationResult>> {
-    const existingInvoice: Exists | null = await pool.oneOrNone(SQL_FACTURAS.isInvoiceDuplicate, data);
+	public static async insertInvoice(data: Factura[]): Promise<Result<FacturaCreationResult>> {
+		const existingInvoice: Exists | null = await pool.oneOrNone(SQL_FACTURAS.isInvoiceDuplicate, data);
 
-    if (existingInvoice?.exists) {
-      return Result.fail("La factura ya existe");
-    }
+		if (existingInvoice?.exists) {
+			return Result.fail("La factura ya existe");
+		}
 
-    try {
-      const result: FacturaCreationResult = await pool.task(async (consulta) => {
-        return await consulta.one<FacturaCreationResult>(SQL_FACTURAS.createInvoice, data);
-      });
+		try {
+			const result: FacturaCreationResult = await pool.task(async (consulta) => {
+				return await consulta.one<FacturaCreationResult>(SQL_FACTURAS.createInvoice, data);
+			});
 
-      return Result.success({ id_factura: result.id_factura });
-    } catch (error) {
-      return Result.fail(`No se puede crear la factura, ${error}`);
-    }
-  }
+			return Result.success({ id_factura: result.id_factura });
+		} catch (error) {
+			return Result.fail(`No se puede crear la factura, ${error}`);
+		}
+	}
 
-  public static async fetchStoreInvoices(tienda: number): Promise<Result<Factura[]>> {
-    try {
-      const respuesta: Factura[] = await pool.manyOrNone(SQL_FACTURAS.getInvoicesByStoreId, tienda);
-      return Result.success(respuesta);
-    } catch (error) {
-      return Result.fail(`No se puede listar las facturas de la tienda, ${error}`);
-    }
-  }
+	public static async fetchStoreInvoices(tienda: number): Promise<Result<Factura[]>> {
+		try {
+			const respuesta: Factura[] = await pool.manyOrNone(SQL_FACTURAS.getInvoicesByStoreId, tienda);
+			return Result.success(respuesta);
+		} catch (error) {
+			return Result.fail(`No se puede listar las facturas de la tienda, ${error}`);
+		}
+	}
 
-  public static async filterInvoiceIdByStore(tienda: number, id: number): Promise<Result<Factura | null>> {
-    try {
-      const respuesta: Factura | null = await pool.oneOrNone<Factura>(SQL_FACTURAS.getInvoiceByStoreAndId, [tienda, id]);
-      return Result.success(respuesta);
-    } catch (error) {
-      return Result.fail(`No se puede listar la factura de la tienda, ${error}`);
-    }
-  }
+	public static async filterInvoiceIdByStore(tienda: number, id: number): Promise<Result<Factura | null>> {
+		try {
+			const respuesta: Factura | null = await pool.oneOrNone<Factura>(SQL_FACTURAS.getInvoiceByStoreAndId, [tienda, id]);
+			return Result.success(respuesta);
+		} catch (error) {
+			return Result.fail(`No se puede listar la factura de la tienda, ${error}`);
+		}
+	}
 
-  public static async updateInvoice(fieldsToUpdate: { [key: string]: any }, idFactura: number, tienda: number): Promise<Result<string>> {
-    if (Object.keys(fieldsToUpdate).length === 0) {
-      return Result.fail("No se proporcionaron campos para actualizar");
-    }
+	public static async updateInvoice(fieldsToUpdate: { [key: string]: any }, idFactura: number, tienda: number): Promise<Result<string>> {
+		if (Object.keys(fieldsToUpdate).length === 0) {
+			return Result.fail("No se proporcionaron campos para actualizar");
+		}
 
-    const existingInvoice = await pool.oneOrNone(SQL_FACTURAS.checkInvoiceExists, [tienda, idFactura]);
+		const existingInvoice = await pool.oneOrNone(SQL_FACTURAS.checkInvoiceExists, [tienda, idFactura]);
 
-    if (!existingInvoice) {
-      return Result.fail("Factura no encontrada");
-    }
+		if (!existingInvoice) {
+			return Result.fail("Factura no encontrada");
+		}
 
-    try {
-      const setClause = Object.keys(fieldsToUpdate)
-        .map((field, index) => `${field} = $${index + 1}`)
-        .join(", ");
+		try {
+			const setClause = Object.keys(fieldsToUpdate)
+				.map((field, index) => `${field} = $${index + 1}`)
+				.join(", ");
 
-      const values = Object.values(fieldsToUpdate);
-      values.push(idFactura, tienda);
+			const values = Object.values(fieldsToUpdate);
+			values.push(idFactura, tienda);
 
-      const sqlUpdate = `UPDATE facturas SET ${setClause} WHERE id_factura = $${values.length - 1} AND id_tienda = $${values.length}`;
+			const sqlUpdate = `UPDATE facturas SET ${setClause} WHERE id_factura = $${values.length - 1} AND id_tienda = $${values.length}`;
 
-      const result = await pool.result(sqlUpdate, values);
+			const result = await pool.result(sqlUpdate, values);
 
-      if (result.rowCount > 0) {
-        return Result.success("Factura actualizada");
-      } else {
-        return Result.fail("Factura no encontrada");
-      }
-    } catch (error) {
-      return Result.fail(`No se puede actualizar la factura, ${error}`);
-    }
-  }
+			if (result.rowCount > 0) {
+				return Result.success("Factura actualizada");
+			} else {
+				return Result.fail("Factura no encontrada");
+			}
+		} catch (error) {
+			return Result.fail(`No se puede actualizar la factura, ${error}`);
+		}
+	}
 
-  public static async deleteInvoice(tienda: number, idFactura: number): Promise<Result<string>> {
-    const existingInvoice = await pool.oneOrNone(SQL_FACTURAS.checkInvoiceExists, [tienda, idFactura]);
+	public static async deleteInvoice(tienda: number, idFactura: number): Promise<Result<string>> {
+		const existingInvoice = await pool.oneOrNone(SQL_FACTURAS.checkInvoiceExists, [tienda, idFactura]);
 
-    if (!existingInvoice) {
-      return Result.fail("Factura no encontrada");
-    }
+		if (!existingInvoice) {
+			return Result.fail("Factura no encontrada");
+		}
 
-    try {
-      const result = await pool.result(SQL_FACTURAS.deleteInvoice, [tienda, idFactura]);
+		try {
+			const result = await pool.result(SQL_FACTURAS.deleteInvoice, [tienda, idFactura]);
 
-      if (result.rowCount > 0) {
-        return Result.success("Factura eliminada correctamente");
-      } else {
-        return Result.fail("Factura no encontrada");
-      }
-    } catch (error) {
-      return Result.fail(`No se puede eliminar la factura, ${error}`);
-    }
-  }
+			if (result.rowCount > 0) {
+				return Result.success("Factura eliminada correctamente");
+			} else {
+				return Result.fail("Factura no encontrada");
+			}
+		} catch (error) {
+			return Result.fail(`No se puede eliminar la factura, ${error}`);
+		}
+	}
 
-  public static async countInvoicesTypeByStore(tienda: number, tipo: contador) {
-    const queriesByType: Record<contador, string> = {
-      "anual": SQL_FACTURAS.storeAnnualInvoiceCounter,
-      "mensual": SQL_FACTURAS.storeMonthlyInvoiceCounter,
-      "diaria": SQL_FACTURAS.storeDailyInvoiceCounter,
-    };
+	public static async countInvoicesTypeByStore(tienda: number, tipo: contador) {
+		const queriesByType: Record<contador, string> = {
+			"anual": SQL_FACTURAS.storeAnnualInvoiceCounter,
+			"mensual": SQL_FACTURAS.storeMonthlyInvoiceCounter,
+			"diaria": SQL_FACTURAS.storeDailyInvoiceCounter,
+		};
 
-    const counterSQLQuery = queriesByType[tipo];
+		const counterSQLQuery = queriesByType[tipo];
 
-    if (!counterSQLQuery) {
-      return Result.fail(`Tipo de contador '${tipo.toUpperCase()}' no válido.`);
-    }
+		if (!counterSQLQuery) {
+			return Result.fail(`Tipo de contador '${tipo.toUpperCase()}' no válido.`);
+		}
 
-    try {
-      const result = await pool.result(counterSQLQuery, [tienda]);
-      if (result.rowCount > 0) {
-        return Result.success(result.rows[0]);
-      } else {
-        return Result.fail(`No se encontraron facturas para la tienda ${tienda}`);
-      }
-    } catch (error) {
-      return Result.fail(`Error listando cantidad de facturas ${tipo.toUpperCase()}: ${(error as Error).message}`);
-    }
-  }
+		try {
+			const result = await pool.result(counterSQLQuery, [tienda]);
+			if (result.rowCount > 0) {
+				return Result.success(result.rows[0]);
+			} else {
+				return Result.fail(`No se encontraron facturas para la tienda ${tienda}`);
+			}
+		} catch (error) {
+			return Result.fail(`Error listando cantidad de facturas ${tipo.toUpperCase()}: ${(error as Error).message}`);
+		}
+	}
 }

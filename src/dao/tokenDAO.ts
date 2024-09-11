@@ -8,28 +8,28 @@ import Result from "../utils/Result";
 config({ path: "./.env" });
 
 export default class tokenDAO {
-  public static async generateToken(data: Token[]): Promise<Result<string>> {
-    try {
-      const result = await pool.result(SQL_TOKEN.getUserToken, 
-        data
-      );
+	public static async generateToken(data: Token[]): Promise<Result<string>> {
+		try {
+			const result = await pool.result(SQL_TOKEN.getUserToken, 
+				data
+			);
 
-      if (result.rows.length === 0) {
-        return Result.fail("No se encontraron registros");
-      }
+			if (result.rows.length === 0) {
+				return Result.fail("No se encontraron registros");
+			}
 
-      const { username, id_tienda, nombre_rol } = result.rows[0] as DataToken;
-      const secretKey = process.env.JWT_SECRET_KEY || 'LaSuperClave';
+			const { username, id_tienda, nombre_rol } = result.rows[0] as DataToken;
+			const secretKey = process.env.JWT_SECRET_KEY || 'LaSuperClave';
 
-      const token = Jwt.sign(
-        { username, id_tienda, nombre_rol },
-        secretKey,
-        { expiresIn: "10000d" }
-      );
+			const token = Jwt.sign(
+				{ username, id_tienda, nombre_rol },
+				secretKey,
+				{ expiresIn: "10000d" }
+			);
 
-      return Result.success(token);
-    } catch (error) {
-      return Result.fail(`No se puede generar el token, ${(error as Error).message}`);
-    }
-  }
+			return Result.success(token);
+		} catch (error) {
+			return Result.fail(`No se puede generar el token, ${(error as Error).message}`);
+		}
+	}
 }
