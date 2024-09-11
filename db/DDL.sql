@@ -1,3 +1,4 @@
+-- Active: 1724424858906@@aws-0-us-west-1.pooler.supabase.com@6543@postgres@public
 BEGIN;
 -- Creación de la tabla roles
 CREATE TABLE IF NOT EXISTS roles (

@@ -1,26 +1,12 @@
 import pool from "../config/connection/conexion";
 import { DetalleFactura, Factura, FacturaCreationResult } from "../interface/interfaces";
-// import { SQL_DETALLES, SQL_FACTURAS, SQL_PRODUCTOS } from "../repository/crudSQL";
+import { SQL_DETALLES, SQL_FACTURAS, SQL_PRODUCTOS } from "../repository/crudSQL";
 import Result from "../utils/Result";
-
-const SQL_FACTURAS = {
-  createInvoice: "INSERT INTO facturas (fecha_venta, vendedor_factura, cantidad_producto, id_tienda) VALUES ($1, $2, $3, $4) RETURNING id_factura",
-};
-
-const SQL_DETALLES = {
-  getInvoiceDetailsByStoreAndID: "SELECT * FROM detalles_facturas where id_tienda = $1 and id_factura = $2",
-  insertNewDetail: "INSERT INTO detalles_facturas (cantidad_producto, fecha_creacion, id_factura, id_producto) VALUES($1, $2, $3, $4)",
-};
-
-const SQL_PRODUCTOS = {
-  checkProductExists: "SELECT 1 FROM productos WHERE id_producto = $1",
-};
 
 export default class DetalleFacturaDAO {
   public static async insertInvoiceWithDetails(factura: Omit<Factura, 'id_factura'>, detalles: Omit<DetalleFactura, 'id_factura'>[]): Promise<Result<FacturaCreationResult>> {
     try {
       const result = await pool.task(async (consulta) => {
-        // Inserta la factura
         const facturaValues: Omit<Factura, 'id_factura'> = {
           fecha_venta: factura.fecha_venta, 
           vendedor_factura: factura.vendedor_factura, 
@@ -29,11 +15,9 @@ export default class DetalleFacturaDAO {
         };
         const facturaResult: FacturaCreationResult = await consulta.one<FacturaCreationResult>(SQL_FACTURAS.createInvoice, [facturaValues.fecha_venta, facturaValues.vendedor_factura, facturaValues.cantidad_producto, facturaValues.id_tienda]);
 
-        // Obtiene el id_factura generado
         const id_factura = facturaResult.id_factura;
         console.log(`Factura creada con id: ${id_factura}`);
 
-        // Verifica que todos los productos existen antes de insertar los detalles
         for (const detalle of detalles) {
           const detalleValues = {
             cantidad_producto: detalle.cantidad_producto, 
@@ -49,7 +33,6 @@ export default class DetalleFacturaDAO {
           }
         }
 
-        // Inserta los detalles de la factura
         for (const detalle of detalles) {
           const detalleValues: Omit<DetalleFactura, 'id_detalle_factura'> = {
             cantidad_producto: detalle.cantidad_producto, 
