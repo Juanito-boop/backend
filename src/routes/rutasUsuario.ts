@@ -16,25 +16,11 @@ class Rutas {
   }
   public rutas() {
 	// /api/v1/public/usuarios
-	this.rutasApi.post("/", UsuarioController.insertUser);
-	this.rutasApi.post("/many", UsuarioController.insertUsers);
 	this.rutasApi.get(
-	  "/",
+	  "/:username",
 	  cacheMiddleware(),
-	  UsuarioController.findAllUsers
+	  UsuarioController.fetchUser
 	);
-	this.rutasApi.get(
-	  "/:idTienda",
-	   cacheMiddleware(),
-	  UsuarioController.fetchUsers
-	);
-	this.rutasApi.get(
-	  "/:idTienda/:idUsuario",
-	   cacheMiddleware(),
-	  UsuarioController.findUser
-	);
-	this.rutasApi.patch("/:idTienda/:idUsuario", UsuarioController.patchUser);
-	this.rutasApi.delete("/:idTienda/:idUsuario", UsuarioController.deleteUser);
   }
 }
 

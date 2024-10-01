@@ -10,19 +10,17 @@ config({ path: "./.env" });
 export default class tokenDAO {
 	public static async generateToken(data: Token[]): Promise<Result<string>> {
 		try {
-			const result = await pool.result(SQL_TOKEN.getUserToken, 
-				data
-			);
+			const result = await pool.result(SQL_TOKEN.getUserToken, data);
 
 			if (result.rows.length === 0) {
 				return Result.fail("No se encontraron registros");
 			}
 
-			const { username, id_tienda, nombre_rol } = result.rows[0] as DataToken;
+			const { username, role } = result.rows[0] as DataToken;
 			const secretKey = process.env.JWT_SECRET_KEY || 'LaSuperClave';
 
 			const token = Jwt.sign(
-				{ username, id_tienda, nombre_rol },
+				{ username, role },
 				secretKey,
 				{ expiresIn: "10000d" }
 			);

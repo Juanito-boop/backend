@@ -4,14 +4,10 @@ import   express      from "express";
 import   morgan       from "morgan";
 import   portfinder   from 'portfinder';
 
-import seguridad       from "../../middleware/Seguridad";
-import rutasCategorias from "../../routes/rutasCategorias";
-import rutasDetalles   from "../../routes/rutasDetalles";
-import rutasFacturas   from "../../routes/rutasFacturas";
-import rutasProductos  from "../../routes/rutasProductos";
-import rutasTienda     from "../../routes/rutasTienda";
-import rutasUsuario    from "../../routes/rutasUsuario";
-import tokenRuta       from "../../routes/TokenRuta";
+import seguridad       	  from "../../middleware/Seguridad";
+import rutasUsuario    	  from "../../routes/rutasUsuario";
+import rutasSinMiddleware from "../../routes/rutasSinMiddleware";
+import tokenRuta          from "../../routes/TokenRuta";
 
 class Servidor {
 	public app: express.Application;
@@ -38,12 +34,8 @@ class Servidor {
 		this.app.get("/", (_req, res) => {
 			res.send("hello world");
 		});
-		this.app.use(`${this.v1}/categorias`, seguridad.revisar, rutasCategorias); // listo
-		this.app.use(`${this.v1}/detalles`, seguridad.revisar, rutasDetalles); // listo
-		this.app.use(`${this.v1}/facturas`, seguridad.revisar, rutasFacturas); // listo
-		this.app.use(`${this.v1}/productos`, seguridad.revisar, rutasProductos); // listo
-		this.app.use(`${this.v1}/tiendas`, seguridad.revisar, rutasTienda); // listo
 		this.app.use(`${this.v1}/token`, tokenRuta); // listo
+		this.app.use(`${this.v1}/crearUsuarios`, rutasSinMiddleware) //listo
 		this.app.use(`${this.v1}/usuarios`, seguridad.revisar, rutasUsuario); // listo
 	}
 

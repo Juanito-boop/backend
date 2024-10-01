@@ -48,6 +48,20 @@ export interface Usuario {
 	id_rol: number;
 }
 
+export interface User {
+    user_id?: number;           // El ID del usuario será opcional, ya que puede no estar disponible hasta después de la inserción
+    nombre: string;             // Nombre del usuario, requerido
+    apellido: string;           // Apellido del usuario, requerido
+    email: string;              // Correo electrónico único, requerido
+    username: string;           // Nombre de usuario único, requerido
+    password_hash: string;      // Contraseña encriptada, requerida
+    avatar_url?: string | null; // URL del avatar del usuario, opcional
+    role: number;               // ID del rol (referencia a la tabla roles)
+    created_at?: string;        // Fecha de creación, generada automáticamente, opcional
+    updated_at?: string;        // Fecha de última actualización, generada automáticamente, opcional
+}
+
+
 export interface UsuarioBulkResult {
 	created: UsuarioCreationResult[];
 	errors: string[];
@@ -75,8 +89,7 @@ export interface Token {
 
 export interface DataToken{
 	username: string;
-	id_tienda: number;
-	nombre_rol: string;
+	role: string;
 }
 
 export interface Empleados{

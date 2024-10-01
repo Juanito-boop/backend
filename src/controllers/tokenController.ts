@@ -4,8 +4,8 @@ import tokenDAO from "../dao/tokenDAO";
 
 class tokenController {
 	public async createToken(req: Request, res: Response): Promise<void> {
-		const { username, password } = req.body;
-		const data: Token[] = [username, password];
+		const { username, password_hash } = req.body;
+		const data: Token[] = [username, password_hash];
 
 		const result = await tokenDAO.generateToken(data);
 
