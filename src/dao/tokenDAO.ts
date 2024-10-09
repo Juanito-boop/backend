@@ -17,17 +17,26 @@ export default class tokenDAO {
 			}
 
 			const { username, role } = result.rows[0] as DataToken;
-			const secretKey = process.env.JWT_SECRET_KEY || 'LaSuperClave';
+			const secretKey = process.env.JWT_SECRET_KEY || "LaSuperClave";
 
-			const token = Jwt.sign(
-				{ username, role },
-				secretKey,
-				{ expiresIn: "10000d" }
-			);
+      const token = Jwt.sign({ username, role }, secretKey, {
+        expiresIn: "10000d",
+      });
 
 			return Result.success(token);
-		} catch (error) {
-			return Result.fail(`No se puede generar el token, ${(error as Error).message}`);
+		} catch (error: any) {
+			return Result.fail(`No se puede generar el token, ${error.message}`);
+		}
+	}
+
+	public static async getUserCredentials(username: string): Promise<Result<{ password: string }>> {
+		try {
+			const result = await pool.one(SQL_TOKEN.getUserCredentials, [username]);
+			return Result.success(result);
+		} catch (error: any) {
+			return Result.fail(
+				`No se puede obtener las credenciales del usuario: ${error.message}`
+			);
 		}
 	}
 }

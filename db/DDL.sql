@@ -1,93 +1,42 @@
--- Active: 1724424858906@@aws-0-us-west-1.pooler.supabase.com@6543@postgres@public
-BEGIN;
--- Creación de la tabla roles
-CREATE TABLE IF NOT EXISTS roles (
-	id_rol serial4 NOT NULL,
-	nombre_rol varchar NOT NULL,
-	CONSTRAINT roles_pkey PRIMARY KEY (id_rol)
-);
+-- Active: 1727760906032@@aws-0-us-west-1.pooler.supabase.com@6543@postgres
+DO $$
+DECLARE
+	r RECORD;
+BEGIN
+	FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'public') LOOP
+		EXECUTE 'DROP TABLE IF EXISTS ' || quote_ident(r.tablename) || ' CASCADE;';
+	END LOOP;
+	
+	IF NOT EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'uuid-ossp') THEN
+		EXECUTE 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";';
+	END IF;
 
--- Creación de la tabla tiendas
-CREATE TABLE IF NOT EXISTS tiendas (
-	id_tienda serial4 NOT NULL,
-	nombre_tienda varchar NOT NULL,
-	direccion_tienda varchar NOT NULL,
-	telefono_tienda varchar NOT NULL,
-	propietario_tienda varchar NOT NULL,
-	CONSTRAINT tiendas_pkey PRIMARY KEY (id_tienda)
-);
+	EXECUTE '
+	CREATE TABLE IF NOT EXISTS roles (
+		id_rol serial4 NOT NULL,
+		nombre_rol varchar NOT NULL,
+		CONSTRAINT roles_pkey PRIMARY KEY (id_rol)
+	);
 
--- Creación de la tabla usuarios
-CREATE TABLE IF NOT EXISTS usuarios (
-	id_usuario serial4 NOT NULL,
-	username varchar NOT NULL,
-	"password" varchar NOT NULL,
-	id_tienda int4 NOT NULL,
-	id_rol int4 NOT NULL,
-	CONSTRAINT usuarios_pkey PRIMARY KEY (id_usuario)
-);
+	INSERT INTO roles (nombre_rol) VALUES 
+		(''administrador''),
+		(''usuario''),
+		(''proveedor''),
+		(''establecimiento'')
+	ON CONFLICT DO NOTHING;';
 
--- Creación de la tabla categorias
-CREATE TABLE IF NOT EXISTS categorias (
-	id_categoria serial4 NOT NULL,
-	nombre varchar NOT NULL,
-	descripcion varchar NOT NULL,
-	id_tienda int4 NOT NULL,
-	CONSTRAINT categorias_pkey PRIMARY KEY (id_categoria)
-);
-
--- Creación de la tabla facturas
-CREATE TABLE IF NOT EXISTS facturas (
-	id_factura serial4 NOT NULL,
-	fecha_venta date NOT NULL,
-	vendedor_factura varchar NOT NULL,
-	cantidad_producto int4 NOT NULL,
-	id_tienda int4 NOT NULL,
-	CONSTRAINT facturas_pkey PRIMARY KEY (id_factura)
-);
-
--- Creación de la tabla productos
-CREATE TABLE IF NOT EXISTS productos (
-	id_producto serial4 NOT NULL,
-	nombre varchar NOT NULL,
-	marca varchar NOT NULL,
-	precio_unitario float8 NOT NULL,
-	fecha_caducidad date NOT NULL,
-	descripcion varchar NOT NULL,
-	stock int4 NOT NULL,
-	id_categoria int4 NOT NULL,
-	id_tienda int4 NOT NULL,
-	CONSTRAINT productos_pkey PRIMARY KEY (id_producto)
-);
-
--- Creación de la tabla detalles_facturas
-CREATE TABLE IF NOT EXISTS detalles_facturas (
-	id_detalle_factura serial4 NOT NULL,
-	cantidad_producto int4 NOT NULL,
-	fecha_creacion date NOT NULL,
-	id_factura int4 NOT NULL,
-	id_producto int4 NOT NULL,
-	CONSTRAINT detalles_facturas_pkey PRIMARY KEY (id_detalle_factura)
-);
-
--- Adición de claves foráneas a la tabla usuarios
-ALTER TABLE usuarios ADD CONSTRAINT fk_roles_to_usuarios FOREIGN KEY (id_rol) REFERENCES roles(id_rol);
-
-ALTER TABLE usuarios ADD CONSTRAINT fk_tiendas_to_usuarios FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda);
-
--- Adición de claves foráneas a la tabla categorias
-ALTER TABLE categorias ADD CONSTRAINT fk_tiendas_to_categorias FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda);
-
--- Adición de claves foráneas a la tabla facturas
-ALTER TABLE facturas ADD CONSTRAINT fk_tiendas_to_facturas FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda);
-
--- Adición de claves foráneas a la tabla productos
-ALTER TABLE productos ADD CONSTRAINT fk_categorias_to_productos FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria);
-
-ALTER TABLE productos ADD CONSTRAINT fk_tiendas_to_productos FOREIGN KEY (id_tienda) REFERENCES tiendas(id_tienda);
-
--- Adición de claves foráneas a la tabla detalles_facturas
-ALTER TABLE detalles_facturas ADD CONSTRAINT fk_facturas_to_detalles_facturas FOREIGN KEY (id_factura) REFERENCES facturas(id_factura);
-
-ALTER TABLE detalles_facturas ADD CONSTRAINT fk_productos_to_detalles_facturas FOREIGN KEY (id_producto) REFERENCES productos(id_producto);
-COMMIT;
+	EXECUTE '
+	CREATE TABLE IF NOT EXISTS users (
+		user_id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), 
+		nombre VARCHAR(100) NOT NULL,
+		apellido VARCHAR(100) NOT NULL,
+		email VARCHAR(100) UNIQUE NOT NULL,
+		username VARCHAR(50) UNIQUE NOT NULL,
+		password TEXT NOT NULL,
+		avatar_url TEXT,
+		role INT NOT NULL,
+		created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+		updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+		CONSTRAINT fk_role FOREIGN KEY (role) REFERENCES roles (id_rol)
+	);';
+END $$;

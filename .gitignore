@@ -1,3 +1,10 @@
 /build
 /node_modules
 .erd.json
+.env
+.devcontainer
+.idea
+.idx
+.vscode
+structure.json
+usuarios.json

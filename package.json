@@ -1,7 +1,6 @@
 {
-  "name": "inventario_tiendas_cc",
+  "name": "Gerencia",
   "version": "1.0.0",
-  "description": "Proyecto camara de comercio proyecto integrador desarrollo orientado a servicios",
   "main": "index.js",
   "scripts": {
     "build": "tsc -watch",
@@ -15,13 +14,14 @@
     "Rest",
     "postgresql"
   ],
-  "author": "Marian Mora, Sebastián Leal, Paula Martinez, Jesus Blanco",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "9.0.6",
+    "bcrypt": "^5.1.1",
     "cors": "2.8.5",
     "express": "4.19.2",
-    "inventario_tiendas_cc": "file:",
+    "Gerencia": "file:",
     "jsonwebtoken": "9.0.2",
     "morgan": "1.10.0",
     "node-cache": "^5.1.2",
